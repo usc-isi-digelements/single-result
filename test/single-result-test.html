@@ -1,0 +1,717 @@
+<!--
+Copyright 2017 Next Century Corporation
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <link rel="import" href="../single-result.html">
+</head>
+
+<body>
+  <test-fixture id="single-result-fixture">
+    <template>
+      <single-result></single-result>
+    </template>
+  </test-fixture>
+
+  <script>
+    /* globals suite, test, expect, setup, fixture, flush */
+    /* jshint -W030 */
+    suite('single-result tests', function() {
+      var element;
+
+      setup(function(done) {
+        element = fixture('single-result-fixture');
+        flush(done);
+      });
+
+      test('default properties are set correctly', function() {
+        expect(element.flag).to.equal('');
+        expect(element.highlightedText).to.equal('');
+        expect(element.icon).to.equal('');
+        expect(element.link).to.equal('');
+        expect(element.rank).to.equal(0);
+        expect(element.styleClass).to.equal('');
+        expect(element.text).to.equal('');
+        expect(element.type).to.equal('');
+        expect(element.headerExtractions).to.deep.equal([]);
+        expect(element.detailExtractions).to.deep.equal([]);
+        expect(element.extractionDataProperty).to.equal('data');
+        expect(element.extractionDataConfidenceProperty).to.equal('confidence');
+        expect(element.extractionDataHighlightProperty).to.equal('highlight');
+        expect(element.extractionDataIconProperty).to.equal('icon');
+        expect(element.extractionDataLinkProperty).to.equal('link');
+        expect(element.extractionDataStyleClassProperty).to.equal('styleClass');
+        expect(element.extractionDataTextProperty).to.equal('text');
+        expect(element.extractionNameProperty).to.equal('name');
+        expect(element.details).to.deep.equal([]);
+        expect(element.detailHighlightedTextProperty).to.equal('highlightedText');
+        expect(element.detailLinkProperty).to.equal('link');
+        expect(element.detailNameProperty).to.equal('name');
+        expect(element.detailTextProperty).to.equal('text');
+        expect(element.images).to.deep.equal([]);
+        expect(element.imageLinkProperty).to.equal('link');
+        expect(element.imageSourceProperty).to.equal('source');
+        expect(element.smallImageStyleClass).to.equal('');
+        expect(element.largeImageStyleClass).to.equal('');
+        expect(element.highlightedTextTags).to.equal('em');
+        expect(element.newTab).to.be.false;
+        expect(element._hovering).to.be.false;
+        expect(element._open).to.be.false;
+      });
+
+      test('_imageSrc is set to blank', function() {
+        expect(element._imageSrc).to.equal('');
+      });
+
+      test('does have paper-material element', function() {
+        expect(element.$$('paper-material')).to.exist;
+        expect(element.$$('paper-material').classList.contains('closed')).to.be.true;
+        expect(element.$$('paper-material').classList.contains('opened')).to.be.false;
+        expect(element.$$('paper-material').clickable).to.be.false;
+      });
+
+      test('does have empty iron-image element', function() {
+        expect(element.$$('iron-image')).to.exist;
+        expect(element.$$('iron-image').classList.contains('show')).to.be.true;
+        expect(element.$$('iron-image').src).to.equal('');
+      });
+
+      test('does have modal-icon element', function() {
+        expect(element.$$('modal-icon')).to.exist;
+        expect(element.$$('modal-icon').icon).to.equal('');
+        expect(element.$$('modal-icon').iconStyleClass).to.equal('');
+        expect(element.$$('modal-icon').showIcon).to.be.true;
+        expect(element.$$('modal-icon').open).to.be.false;
+        expect(element.$$('modal-icon').openable).to.be.false;
+      });
+
+      test('does have highlighted-text element', function() {
+        expect(element.$$('highlighted-text')).to.exist;
+        expect(element.$$('highlighted-text').tags).to.equal('em');
+        expect(element.$$('highlighted-text').text).to.equal('');
+      });
+
+      test('does not have rank element', function() {
+        expect(element.$$('.result-rank')).to.not.exist;
+      });
+
+      test('does not have flag element', function() {
+        expect(element.$$('.result-flag')).to.not.exist;
+      });
+
+      test('does not have anchor element', function() {
+        expect(element.$$('a')).to.not.exist;
+      });
+
+      test('does not have extraction-grid element', function() {
+        expect(element.$$('extraction-grid')).to.not.exist;
+      });
+
+      test('does not have icon-collapse element', function() {
+        expect(element.$$('iron-collapse')).to.not.exist;
+      });
+
+      test('does not have detail-view element', function() {
+        expect(element.$$('detail-view')).to.not.exist;
+      });
+
+      test('_computeImageSrc does return source correctly', function() {
+        expect(element._computeImageSrc).to.be.a('Function');
+        expect(element._computeImageSrc([{
+          source: 'source1'
+        }], 'source')).to.equal('source1');
+        expect(element._computeImageSrc([{
+          source: 'source1'
+        }, {
+          source: 'source2'
+        }], 'source')).to.equal('source1');
+      });
+
+      test('_computeImageSrc given empty image array does return undefined', function() {
+        expect(element._computeImageSrc([])).to.not.exist;
+      });
+
+      test('_computeImageSrc given undefined does return _imageSrc', function() {
+        expect(element._computeImageSrc()).to.equal('');
+      });
+
+      test('_doesHaveDetails does return correctly', function() {
+        expect(element._doesHaveDetails).to.be.a('Function');
+        expect(element._doesHaveDetails()).to.be.false;
+        expect(element._doesHaveDetails([], [], [])).to.be.false;
+        expect(element._doesHaveDetails([1], [], [])).to.be.true;
+        expect(element._doesHaveDetails([], [2], [])).to.be.true;
+        expect(element._doesHaveDetails([], [], [3])).to.be.true;
+        expect(element._doesHaveDetails([1], [2], [3])).to.be.true;
+      });
+
+      test('_getProperty does return correctly', function() {
+        expect(element._getProperty).to.be.a('Function');
+        expect(element._getProperty({}, 'property')).to.not.exist;
+        expect(element._getProperty({
+          property: 'text'
+        }, 'notproperty')).to.not.exist;
+        expect(element._getProperty({
+          notproperty: 'text'
+        }, 'property')).to.not.exist;
+        expect(element._getProperty({
+          property: 'text'
+        }, 'property')).to.equal('text');
+        expect(element._getProperty({
+          property: 10
+        }, 'property')).to.equal(10);
+        expect(element._getProperty({
+          property: true
+        }, 'property')).to.be.true;
+        expect(element._getProperty({
+          property: [1, 2, 3, 4, 5]
+        }, 'property')).to.deep.equal([1, 2, 3, 4, 5]);
+        expect(element._getProperty({
+          property: {
+            key: 'value'
+          }
+        }, 'property')).to.deep.equal({
+          key: 'value'
+        });
+      });
+
+      test('_getResultStyleClass does return string correctly', function() {
+        expect(element._getResultStyleClass).to.be.a('Function');
+        expect(element._getResultStyleClass(true)).to.equal('opened');
+        expect(element._getResultStyleClass(false)).to.equal('closed');
+      });
+
+      test('_getResultText does return string correctly', function() {
+        expect(element._getResultText).to.be.a('Function');
+        expect(element._getResultText('text')).to.equal('text');
+        expect(element._getResultText('text', '')).to.equal('text');
+        expect(element._getResultText('text', 'highlightedText')).to.equal('highlightedText');
+        expect(element._getResultText('', 'highlightedText')).to.equal('highlightedText');
+      });
+
+      test('_getTarget does return correctly', function() {
+        expect(element._getTarget).to.be.a('Function');
+        expect(element._getTarget(true)).to.equal('_blank');
+        expect(element._getTarget(false)).to.equal('_self');
+      });
+
+      test('_hoverEnd does set _hovering to false', function() {
+        expect(element._hoverEnd).to.be.a('Function');
+        element._hovering = true;
+        element._hoverEnd();
+        expect(element._hovering).to.be.false;
+      });
+
+      test('_hoverStart does set _hovering to true', function() {
+        expect(element._hoverStart).to.be.a('Function');
+        element._hovering = false;
+        element._hoverStart();
+        expect(element._hovering).to.be.true;
+      });
+
+      test('_showImageElement does return string correctly', function() {
+        expect(element._showImageElement).to.be.a('Function');
+        expect(element._showImageElement()).to.equal('');
+        expect(element._showImageElement([])).to.equal('show');
+        expect(element._showImageElement([{
+          source: 'source1'
+        }])).to.equal('show');
+        expect(element._showImageElement([{
+          source: 'source1'
+        }, {
+          source: 'source2'
+        }])).to.equal('show');
+      });
+
+      test('toggleDetails does nothing if details, detailExtractions, and images are empty', function() {
+        element.toggleDetails({
+          target: {
+            classList: {
+              contains: function() {
+                return false;
+              }
+            },
+            localName: 'my-element'
+          }
+        });
+
+        expect(element._open).to.be.false;
+        expect(element.$$('paper-material').classList.contains('closed')).to.be.true;
+        expect(element.$$('paper-material').classList.contains('opened')).to.be.false;
+        expect(element.$$('iron-collapse')).to.not.exist;
+      });
+    });
+
+/*
+        element.headerExtractions = [{
+          name: 'myExtraction1',
+          data: [{
+            confidence: 'high',
+            highlight: true,
+            icon: 'myExtractionIcon1',
+            link: 'myExtractionLink1',
+            styleClass: 'myExtractionStyleClass1',
+            text: 'myExtractionText1'
+          }, {
+            confidence: 'low',
+            highlight: false,
+            icon: 'myExtractionIcon2',
+            link: 'myExtractionLink2',
+            styleClass: 'myExtractionStyleClass2',
+            text: 'myExtractionText2'
+          }]
+        }];
+
+        element.detailExtractions = [{
+          name: 'myExtraction2',
+          data: [{
+            icon: 'myExtractionIcon3',
+            link: 'myExtractionLink3',
+            styleClass: 'myExtractionStyleClass3',
+            text: 'myExtractionText3'
+          }]
+        }, {
+          data: [{
+            text: 'myExtractionText4'
+          }]
+        }];
+
+*/
+
+    suite('single-result tests with data', function() {
+
+      setup(function(done) {
+        element = fixture('single-result-fixture');
+        element.flag = 'myFlag';
+        element.icon = 'myIcon';
+        element.link = 'myLink';
+        element.rank = 1.234;
+        element.styleClass = 'myStyleClass';
+        element.text = 'myText';
+        element.type = 'myType';
+
+        element.headerExtractions = [{
+          name: 'myHeaderExtraction1',
+          data: [{
+            text: 'myHeaderExtractionText1'
+          }, {
+            text: 'myHeaderExtractionText2'
+          }]
+        }, {
+          name: 'myHeaderExtraction2',
+          data: [{
+            text: 'myHeaderExtractionText3'
+          }, {
+            text: 'myHeaderExtractionText4'
+          }]
+        }];
+
+        element.details = [{
+          name: 'myDetail1',
+          text: 'myDetailText1',
+        }, {
+          name: 'myDetail2',
+          highlightedText: '<highlight>myDetailText2</highlight>'
+        }];
+
+        element.detailExtractions = [{
+          name: 'myDetailExtraction1',
+          data: [{
+            text: 'myDetailExtractionText1'
+          }, {
+            text: 'myDetailExtractionText2'
+          }]
+        }, {
+          name: 'myDetailExtraction2',
+          data: [{
+            text: 'myDetailExtractionText3'
+          }, {
+            text: 'myDetailExtractionText4'
+          }]
+        }];
+
+        element.images = [{
+          source: 'source1'
+        }, {
+          source: 'source2'
+        }];
+
+        element.smallImageStyleClass = 'small';
+        element.largeImageStyleClass = 'large';
+        element.highlightedTextTags = 'highlight';
+        element.newTab = true;
+
+        flush(done);
+      });
+
+      test('input properties are set correctly', function() {
+        expect(element.flag).to.equal('myFlag');
+        expect(element.icon).to.equal('myIcon');
+        expect(element.link).to.equal('myLink');
+        expect(element.rank).to.equal(1.234);
+        expect(element.styleClass).to.equal('myStyleClass');
+        expect(element.text).to.equal('myText');
+        expect(element.type).to.equal('myType');
+
+        expect(element.headerExtractions).to.deep.equal([{
+          name: 'myHeaderExtraction1',
+          data: [{
+            text: 'myHeaderExtractionText1'
+          }, {
+            text: 'myHeaderExtractionText2'
+          }]
+        }, {
+          name: 'myHeaderExtraction2',
+          data: [{
+            text: 'myHeaderExtractionText3'
+          }, {
+            text: 'myHeaderExtractionText4'
+          }]
+        }]);
+
+        expect(element.details).to.deep.equal([{
+          name: 'myDetail1',
+          text: 'myDetailText1',
+        }, {
+          name: 'myDetail2',
+          highlightedText: '<highlight>myDetailText2</highlight>'
+        }]);
+
+        expect(element.detailExtractions).to.deep.equal([{
+          name: 'myDetailExtraction1',
+          data: [{
+            text: 'myDetailExtractionText1'
+          }, {
+            text: 'myDetailExtractionText2'
+          }]
+        }, {
+          name: 'myDetailExtraction2',
+          data: [{
+            text: 'myDetailExtractionText3'
+          }, {
+            text: 'myDetailExtractionText4'
+          }]
+        }]);
+
+        expect(element.images).to.deep.equal([{
+          source: 'source1'
+        }, {
+          source: 'source2'
+        }]);
+
+        expect(element.smallImageStyleClass).to.equal('small');
+        expect(element.largeImageStyleClass).to.equal('large');
+        expect(element.highlightedTextTags).to.equal('highlight');
+        expect(element.newTab).to.be.true;
+      });
+
+      test('default properties are set correctly', function() {
+        expect(element.highlightedText).to.equal('');
+        expect(element.extractionDataProperty).to.equal('data');
+        expect(element.extractionDataConfidenceProperty).to.equal('confidence');
+        expect(element.extractionDataHighlightProperty).to.equal('highlight');
+        expect(element.extractionDataIconProperty).to.equal('icon');
+        expect(element.extractionDataLinkProperty).to.equal('link');
+        expect(element.extractionDataStyleClassProperty).to.equal('styleClass');
+        expect(element.extractionDataTextProperty).to.equal('text');
+        expect(element.extractionNameProperty).to.equal('name');
+        expect(element.detailHighlightedTextProperty).to.equal('highlightedText');
+        expect(element.detailLinkProperty).to.equal('link');
+        expect(element.detailNameProperty).to.equal('name');
+        expect(element.detailTextProperty).to.equal('text');
+        expect(element.imageLinkProperty).to.equal('link');
+        expect(element.imageSourceProperty).to.equal('source');
+        expect(element._hovering).to.be.false;
+        expect(element._open).to.be.false;
+      });
+
+      test('_imageSrc is computed correctly', function() {
+        expect(element._imageSrc).to.equal('source1');
+      });
+
+      test('does have paper-material element', function() {
+        expect(element.$$('paper-material')).to.exist;
+        expect(element.$$('paper-material').classList.contains('closed')).to.be.true;
+        expect(element.$$('paper-material').classList.contains('opened')).to.be.false;
+        expect(element.$$('paper-material').clickable).to.be.true;
+      });
+
+      test('does have iron-image element', function() {
+        expect(element.$$('iron-image')).to.exist;
+        expect(element.$$('iron-image').classList.contains('show')).to.be.true;
+        expect(element.$$('iron-image').src).to.equal('source1');
+      });
+
+      test('does have modal-icon element', function() {
+        expect(element.$$('modal-icon')).to.exist;
+        expect(element.$$('modal-icon').icon).to.equal('myIcon');
+        expect(element.$$('modal-icon').iconStyleClass).to.equal('myStyleClass');
+        expect(element.$$('modal-icon').showIcon).to.be.true;
+        expect(element.$$('modal-icon').open).to.be.false;
+        expect(element.$$('modal-icon').openable).to.be.true;
+      });
+
+      test('does have highlighted-text element', function() {
+        expect(element.$$('highlighted-text')).to.exist;
+        expect(element.$$('highlighted-text').tags).to.equal('highlight');
+        expect(element.$$('highlighted-text').text).to.equal('myText');
+      });
+
+      test('does have rank element', function() {
+        expect(element.$$('.result-rank')).to.exist;
+        expect(element.$$('.result-rank').innerHTML.indexOf('1.234') >= 0).to.be.true;
+      });
+
+      test('does have flag element', function() {
+        expect(element.$$('.result-flag')).to.exist;
+        expect(element.$$('.result-flag').innerHTML.indexOf('myFlag') >= 0).to.be.true;
+      });
+
+      test('does have anchor element', function() {
+        expect(element.$$('a')).to.exist;
+        expect(element.$$('a').href.indexOf('myLink') >= 0).to.be.true;
+        expect(element.$$('a').target).to.equal('_blank');
+        expect(element.$$('a').title).to.equal('Open myType');
+      });
+
+      test('does have extraction-grid element', function() {
+        expect(element.$$('extraction-grid')).to.exist;
+        expect(element.$$('extraction-grid').extractions).to.deep.equal([{
+          name: 'myHeaderExtraction1',
+          data: [{
+            text: 'myHeaderExtractionText1'
+          }, {
+            text: 'myHeaderExtractionText2'
+          }]
+        }, {
+          name: 'myHeaderExtraction2',
+          data: [{
+            text: 'myHeaderExtractionText3'
+          }, {
+            text: 'myHeaderExtractionText4'
+          }]
+        }]);
+        expect(element.$$('extraction-grid').dataProperty).to.equal('data');
+        expect(element.$$('extraction-grid').dataConfidenceProperty).to.equal('confidence');
+        expect(element.$$('extraction-grid').dataHighlightProperty).to.equal('highlight');
+        expect(element.$$('extraction-grid').dataIconProperty).to.equal('icon');
+        expect(element.$$('extraction-grid').dataLinkProperty).to.equal('link');
+        expect(element.$$('extraction-grid').dataStyleClassProperty).to.equal('styleClass');
+        expect(element.$$('extraction-grid').dataTextProperty).to.equal('text');
+        expect(element.$$('extraction-grid').nameProperty).to.equal('name');
+        expect(element.$$('extraction-grid').target).to.equal('_blank');
+      });
+
+      test('does have icon-collapse element', function() {
+        expect(element.$$('iron-collapse')).to.exist;
+        expect(element.$$('iron-collapse').classList.contains('iron-collapse-closed')).to.be.true;
+        expect(element.$$('iron-collapse').classList.contains('iron-collapse-opened')).to.be.false;
+      });
+
+      test('does have detail-view element', function() {
+        expect(element.$$('detail-view')).to.exist;
+        expect(element.$$('detail-view').buttonLink).to.equal('myLink');
+        expect(element.$$('detail-view').buttonText).to.equal('Open myType');
+        expect(element.$$('detail-view').detailHighlightedTextProperty).to.equal('highlightedText');
+        expect(element.$$('detail-view').detailLinkProperty).to.equal('link');
+        expect(element.$$('detail-view').detailNameProperty).to.equal('name');
+        expect(element.$$('detail-view').detailTextProperty).to.equal('text');
+        expect(element.$$('detail-view').extractionDataProperty).to.equal('data');
+        expect(element.$$('detail-view').extractionDataConfidenceProperty).to.equal('confidence');
+        expect(element.$$('detail-view').extractionDataHighlightProperty).to.equal('highlight');
+        expect(element.$$('detail-view').extractionDataIconProperty).to.equal('icon');
+        expect(element.$$('detail-view').extractionDataLinkProperty).to.equal('link');
+        expect(element.$$('detail-view').extractionDataStyleClassProperty).to.equal('styleClass');
+        expect(element.$$('detail-view').extractionDataTextProperty).to.equal('text');
+        expect(element.$$('detail-view').extractionNameProperty).to.equal('name');
+        expect(element.$$('detail-view').imageLinkProperty).to.equal('link');
+        expect(element.$$('detail-view').imageSourceProperty).to.equal('source');
+        expect(element.$$('detail-view').smallImageStyleClass).to.equal('small');
+        expect(element.$$('detail-view').largeImageStyleClass).to.equal('large');
+        expect(element.$$('detail-view').newTab).to.be.true;
+        expect(element.$$('detail-view').details).to.deep.equal([{
+          name: 'myDetail1',
+          text: 'myDetailText1',
+        }, {
+          name: 'myDetail2',
+          highlightedText: '<highlight>myDetailText2</highlight>'
+        }]);
+        expect(element.$$('detail-view').extractions).to.deep.equal([{
+          name: 'myDetailExtraction1',
+          data: [{
+            text: 'myDetailExtractionText1'
+          }, {
+            text: 'myDetailExtractionText2'
+          }]
+        }, {
+          name: 'myDetailExtraction2',
+          data: [{
+            text: 'myDetailExtractionText3'
+          }, {
+            text: 'myDetailExtractionText4'
+          }]
+        }]);
+        expect(element.$$('detail-view').images).to.deep.equal([{
+          source: 'source1'
+        }, {
+          source: 'source2'
+        }]);
+      });
+
+      test('toggleDetails does open the details element', function(done) {
+        var mockEvent = {
+          target: {
+            classList: {
+              contains: function() {
+                return false;
+              }
+            },
+            localName: 'my-element'
+          }
+        };
+
+        var detailsElement = element.$$('#details');
+        element.transitionEndListener = function() {
+          expect(element._open).to.be.true;
+          expect(element.$$('.result')).to.exist;
+          expect(element.$$('.result').classList.contains('closed')).to.be.false;
+          expect(element.$$('.result').classList.contains('opened')).to.be.true;
+          expect(detailsElement).to.exist;
+          expect(detailsElement.classList.contains('iron-collapse-closed')).to.be.false;
+          expect(detailsElement.classList.contains('iron-collapse-opened')).to.be.true;
+          done();
+        };
+        element.listen(detailsElement, 'transitionend', 'transitionEndListener');
+        element.toggleDetails(mockEvent);
+      });
+
+      test('toggleDetails does close the details element', function(done) {
+        element._open = true;
+
+        var mockEvent = {
+          target: {
+            classList: {
+              contains: function() {
+                return false;
+              }
+            },
+            localName: 'my-element'
+          }
+        };
+
+        var detailsElement = element.$$('#details');
+        element.transitionEndListener = function(event) {
+          if(event.target.opened) {
+            element.toggleDetails(mockEvent);
+          } else {
+            expect(element._open).to.be.false;
+            expect(element.$$('.result')).to.exist;
+            expect(element.$$('.result').classList.contains('closed')).to.be.true;
+            expect(element.$$('.result').classList.contains('opened')).to.be.false;
+            expect(detailsElement).to.exist;
+            expect(detailsElement.classList.contains('iron-collapse-closed')).to.be.true;
+            expect(detailsElement.classList.contains('iron-collapse-opened')).to.be.false;
+            done();
+          }
+        };
+        element.listen(detailsElement, 'transitionend', 'transitionEndListener');
+        detailsElement.show();
+      });
+
+      test('toggleDetails does nothing if a paper-button is clicked', function() {
+        var mockEvent = {
+          target: {
+            localName: 'paper-button'
+          }
+        };
+
+        var detailsElement = element.$$('#details');
+        element.transitionEndListener = function(event) {
+          expect.fail();
+        };
+        element.listen(detailsElement, 'transitionend', 'transitionEndListener');
+
+        element.toggleDetails(mockEvent);
+        expect(element._open).to.be.false;
+        expect(element.$$('.result')).to.exist;
+        expect(element.$$('.result').classList.contains('closed')).to.be.true;
+        expect(element.$$('.result').classList.contains('opened')).to.be.false;
+        expect(detailsElement).to.exist;
+        expect(detailsElement.classList.contains('iron-collapse-closed')).to.be.true;
+        expect(detailsElement.classList.contains('iron-collapse-opened')).to.be.false;
+      });
+
+      test('toggleDetails does nothing if a link is clicked', function() {
+        var mockEvent = {
+          target: {
+            localName: 'a'
+          }
+        };
+
+        var detailsElement = element.$$('#details');
+        element.transitionEndListener = function(event) {
+          expect.fail();
+        };
+        element.listen(detailsElement, 'transitionend', 'transitionEndListener');
+
+        element.toggleDetails(mockEvent);
+        expect(element._open).to.be.false;
+        expect(element.$$('.result')).to.exist;
+        expect(element.$$('.result').classList.contains('closed')).to.be.true;
+        expect(element.$$('.result').classList.contains('opened')).to.be.false;
+        expect(detailsElement).to.exist;
+        expect(detailsElement.classList.contains('iron-collapse-closed')).to.be.true;
+        expect(detailsElement.classList.contains('iron-collapse-opened')).to.be.false;
+      });
+
+      test('toggleDetails does nothing if a link child is clicked', function() {
+        var mockEvent = {
+          target: {
+            localName: 'my-element',
+            parentElement: {
+              localName: 'a',
+              classList: {
+                contains: function() {
+                  return false;
+                }
+              }
+            }
+          }
+        };
+
+        var detailsElement = element.$$('#details');
+        element.transitionEndListener = function(event) {
+          expect.fail();
+        };
+        element.listen(detailsElement, 'transitionend', 'transitionEndListener');
+
+        element.toggleDetails(mockEvent);
+        expect(element._open).to.be.false;
+        expect(element.$$('.result')).to.exist;
+        expect(element.$$('.result').classList.contains('closed')).to.be.true;
+        expect(element.$$('.result').classList.contains('opened')).to.be.false;
+        expect(detailsElement).to.exist;
+        expect(detailsElement.classList.contains('iron-collapse-closed')).to.be.true;
+        expect(detailsElement.classList.contains('iron-collapse-opened')).to.be.false;
+      });
+    });
+  </script>
+</body>
+</html>
