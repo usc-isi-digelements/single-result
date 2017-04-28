@@ -84,7 +84,7 @@ limitations under the License.
         expect(element.$$('paper-material')).to.exist;
         expect(element.$$('paper-material').classList.contains('closed')).to.be.true;
         expect(element.$$('paper-material').classList.contains('opened')).to.be.false;
-        expect(element.$$('paper-material').clickable).to.be.false;
+        expect(element.$$('paper-material').classList.contains('pointer')).to.be.false;
       });
 
       test('does have empty iron-image element', function() {
@@ -192,18 +192,26 @@ limitations under the License.
         });
       });
 
-      test('_getResultStyleClass does return string correctly', function() {
-        expect(element._getResultStyleClass).to.be.a('Function');
-        expect(element._getResultStyleClass(true)).to.equal('opened');
-        expect(element._getResultStyleClass(false)).to.equal('closed');
+      test('_getResultHeaderStyleClass does return string correctly', function() {
+        expect(element._getResultHeaderStyleClass).to.be.a('Function');
+        expect(element._getResultHeaderStyleClass([], [], [], true)).to.equal('opened');
+        expect(element._getResultHeaderStyleClass([], [], [], false)).to.equal('closed');
+        expect(element._getResultHeaderStyleClass([1], [], [], true)).to.equal('opened pointer');
+        expect(element._getResultHeaderStyleClass([1], [], [], false)).to.equal('closed pointer');
+        expect(element._getResultHeaderStyleClass([], [2], [], true)).to.equal('opened pointer');
+        expect(element._getResultHeaderStyleClass([], [2], [], false)).to.equal('closed pointer');
+        expect(element._getResultHeaderStyleClass([], [], [3], true)).to.equal('opened pointer');
+        expect(element._getResultHeaderStyleClass([], [], [3], false)).to.equal('closed pointer');
+        expect(element._getResultHeaderStyleClass([1], [2], [3], true)).to.equal('opened pointer');
+        expect(element._getResultHeaderStyleClass([1], [2], [3], false)).to.equal('closed pointer');
       });
 
-      test('_getResultText does return string correctly', function() {
-        expect(element._getResultText).to.be.a('Function');
-        expect(element._getResultText('text')).to.equal('text');
-        expect(element._getResultText('text', '')).to.equal('text');
-        expect(element._getResultText('text', 'highlightedText')).to.equal('highlightedText');
-        expect(element._getResultText('', 'highlightedText')).to.equal('highlightedText');
+      test('_getResultHeaderText does return string correctly', function() {
+        expect(element._getResultHeaderText).to.be.a('Function');
+        expect(element._getResultHeaderText('text')).to.equal('text');
+        expect(element._getResultHeaderText('text', '')).to.equal('text');
+        expect(element._getResultHeaderText('text', 'highlightedText')).to.equal('highlightedText');
+        expect(element._getResultHeaderText('', 'highlightedText')).to.equal('highlightedText');
       });
 
       test('_getTarget does return correctly', function() {
@@ -258,42 +266,6 @@ limitations under the License.
         expect(element.$$('iron-collapse')).to.not.exist;
       });
     });
-
-/*
-        element.headerExtractions = [{
-          name: 'myExtraction1',
-          data: [{
-            confidence: 'high',
-            highlight: true,
-            icon: 'myExtractionIcon1',
-            link: 'myExtractionLink1',
-            styleClass: 'myExtractionStyleClass1',
-            text: 'myExtractionText1'
-          }, {
-            confidence: 'low',
-            highlight: false,
-            icon: 'myExtractionIcon2',
-            link: 'myExtractionLink2',
-            styleClass: 'myExtractionStyleClass2',
-            text: 'myExtractionText2'
-          }]
-        }];
-
-        element.detailExtractions = [{
-          name: 'myExtraction2',
-          data: [{
-            icon: 'myExtractionIcon3',
-            link: 'myExtractionLink3',
-            styleClass: 'myExtractionStyleClass3',
-            text: 'myExtractionText3'
-          }]
-        }, {
-          data: [{
-            text: 'myExtractionText4'
-          }]
-        }];
-
-*/
 
     suite('single-result tests with data', function() {
 
@@ -450,7 +422,7 @@ limitations under the License.
         expect(element.$$('paper-material')).to.exist;
         expect(element.$$('paper-material').classList.contains('closed')).to.be.true;
         expect(element.$$('paper-material').classList.contains('opened')).to.be.false;
-        expect(element.$$('paper-material').clickable).to.be.true;
+        expect(element.$$('paper-material').classList.contains('pointer')).to.be.true;
       });
 
       test('does have iron-image element', function() {
