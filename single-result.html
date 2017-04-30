@@ -138,18 +138,18 @@ images = [{
         min-height: 30px;
       }
 
-      .result-rank {
-        background-color:  var(--paper-grey-400);
+      .border {
         border-radius: 5px;
         margin-bottom: 10px;
         padding: 0 5px;
       }
 
+      .result-rank {
+        background-color:  var(--paper-grey-400);
+      }
+
       .result-flag {
         background-color:  var(--paper-red-200);
-        border-radius: 5px;
-        margin-bottom: 10px;
-        padding: 0 5px;
       }
 
       .result-text {
@@ -174,8 +174,6 @@ images = [{
 
       modal-icon {
         --paper-icon-button: {
-          height: 30px;
-          width: 30px;
           padding: 5px;
         };
       }
@@ -202,7 +200,7 @@ images = [{
 
       <div class="layout vertical center vertical-margin">
         <template is="dom-if" if="[[rank]]">
-          <div class="result-rank text" title$="Search Result Score:  [[rank]]">
+          <div class="result-rank text border" title$="Search Result Score:  [[rank]]">
             <strong>[[rank]]</strong>
           </div>
         </template>
@@ -212,7 +210,7 @@ images = [{
       <div class="layout vertical flex center-justified vertical-margin horizontal-margin">
         <div class="layout horizontal">
           <template is="dom-if" if="[[flag]]">
-            <div class="result-flag text">
+            <div class="result-flag text border">
               <strong>[[flag]]</strong>
             </div>
           </template>
