@@ -93,7 +93,8 @@ images = [{
       }
 
       .result {
-        padding: 0 15px;
+        min-height: 50px;
+        padding: 10px;
       }
 
       .pointer {
@@ -110,20 +111,14 @@ images = [{
         background-color: rgba(0,0,0,0.1);
       }
 
-      .vertical-margin {
-        margin-top: 10px;
-        margin-bottom: 10px;
-      }
-
-      .horizontal-margin {
-        min-height: 50px;
-        margin-left: 15px;
-        margin-right: 15px;
+      .left-column {
+        margin-right: 10px;
       }
 
       iron-image {
         --iron-image-width: 50px;
         background-color: transparent;
+        margin: 5px;
       }
 
       .opened iron-image,
@@ -150,10 +145,10 @@ images = [{
 
       .result-flag {
         background-color:  var(--paper-red-200);
+        margin-right: 10px;
       }
 
       .result-text {
-        margin: 0 5px;
         /* Needed to fix flexbox layout issues in newer browsers. */
         display: -webkit-box;
         overflow: hidden;
@@ -198,7 +193,7 @@ images = [{
       on-mouseout="_hoverEnd"
       on-tap="toggleDetails">
 
-      <div class="layout vertical center vertical-margin">
+      <div class="layout vertical center left-column">
         <template is="dom-if" if="[[rank]]">
           <div class="result-rank text border" title$="Search Result Score:  [[rank]]">
             <strong>[[rank]]</strong>
@@ -207,7 +202,7 @@ images = [{
         <iron-image class$="[[smallImageStyleClass]] hide [[_showImageElement(images)]]" src="[[_imageSrc]]"></iron-image>
       </div>
 
-      <div class="layout vertical flex center-justified vertical-margin horizontal-margin">
+      <div class="layout vertical flex">
         <div class="layout horizontal">
           <template is="dom-if" if="[[flag]]">
             <div class="result-flag text border">
