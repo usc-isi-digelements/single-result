@@ -35,8 +35,10 @@ limitations under the License.
     <p>Detail Extractions: [[stringify(detailExtractions)]]</p>
     <p>Images: [[stringify(images)]]</p>
     <p>New Tab: true</p>
+    <p>Cached Page: [[stringify(cachedPage)]]</p>
 
     <single-result
+      cached-page="[[cachedPage]]"
       flag="Important"
       highlighted-text="The <em>highlighted</em> result text."
       icon="assignment"
@@ -55,16 +57,18 @@ limitations under the License.
     (function(document) {
       var demo = document.querySelector('#demo');
 
+      demo.cachedPage = '<h1>Header</h1><p>The cached page text</p>';
+
       demo.headerExtractions = [{
         name: 'Header Extraction #1',
         data: [{
-          confidence: 'high',
+          confidence: 100,
           highlight: true,
           icon: 'star',
           link: 'https://nextcentury.com',
           text: 'Next Century'
         }, {
-          confidence: 'low',
+          confidence: 50,
           icon: 'favorite',
           link: 'https://github.com/DigElements',
           text: 'DigElements'

@@ -15,6 +15,7 @@ limitations under the License.
 -->
 
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../build-and-run-query/build-and-run-query.html">
 <link rel="import" href="../detail-view/detail-view.html">
 <link rel="import" href="../extraction-grid/extraction-grid.html">
 <link rel="import" href="../highlighted-text/highlighted-text.html">
@@ -23,9 +24,12 @@ limitations under the License.
 <link rel="import" href="../iron-icon/iron-icon.html">
 <link rel="import" href="../iron-icons/iron-icons.html">
 <link rel="import" href="../iron-image/iron-image.html">
+<link rel="import" href="../iron-pages/iron-pages.html">
 <link rel="import" href="../modal-icon/modal-icon.html">
 <link rel="import" href="../paper-material/paper-material.html">
 <link rel="import" href="../paper-styles/color.html">
+<link rel="import" href="../paper-tabs/paper-tabs.html">
+<link rel="import" href="../paper-tabs/paper-tab.html">
 
 <!--
 A Polymer Element showing a single stylized result with images, extractions, details, and other optional information.
@@ -35,7 +39,7 @@ A Polymer Element showing a single stylized result with images, extractions, det
 headerExtractions = [{
   name: 'Built By',
   data: [{
-    confidence: 'high',
+    confidence: 100,
     highlight: true,
     icon: 'star',
     link: 'https://nextcentury.com',
@@ -51,7 +55,7 @@ details = [{
 detailExtractions = [{
   name: 'My Favorite DigElements',
   data: [{
-    confidence: 'high',
+    confidence: 100,
     highlight: true,
     icon: 'link',
     link: 'https://github.com/DigElements/single-result',
@@ -185,6 +189,30 @@ images = [{
       .show {
         display: inline-block;
       }
+
+      .cached-tab {
+        width: 99%;
+        height: 400px;
+        padding: 5px;
+      }
+
+      .cached-frame {
+        width: 100%;
+        height: 400px;
+      }
+
+      paper-tab.iron-selected {
+        background-color: rgba(0,0,0,0.1);
+        font-weight: 600;
+      }
+
+      tag-entity-buttons ::content .background {
+        background-color: var(--paper-grey-400);
+        border-radius: 5px;
+        line-height: 30px;
+        max-height: 60px;
+        padding: 5px;
+      }
     </style>
 
     <paper-material
@@ -227,17 +255,33 @@ images = [{
           <extraction-grid
             extractions="[[headerExtractions]]"
             data-property="[[extractionDataProperty]]"
+            data-classifications-property="[[extractionDataClassificationsProperty]]"
             data-confidence-property="[[extractionDataConfidenceProperty]]"
             data-highlight-property="[[extractionDataHighlightProperty]]"
             data-icon-property="[[extractionDataIconProperty]]"
+            data-id-property="[[extractionDataIdProperty]]"
             data-link-property="[[extractionDataLinkProperty]]"
+            data-provenances-property="[[extractionDataProvenancesProperty]]"
             data-style-class-property="[[extractionDataStyleClassProperty]]"
             data-text-property="[[extractionDataTextProperty]]"
+            highlight-tag="[[extractionProvenanceHighlightTag]]"
             name-property="[[extractionNameProperty]]"
+            provenance-method-property="[[extractionProvenanceMethodProperty]]"
+            provenance-text-property="[[extractionProvenanceTextProperty]]"
+            result-id="[[resultId]]"
+            tag-manager="[[tagManager]]"
             target="[[_getTarget(newTab)]]">
           </extraction-grid>
         </template>
       </div>
+
+      <template is="dom-if" if="[[tagManager]]">
+        <tag-entity-buttons class="self-center"
+          entity-id="[[resultId]]"
+          tag-manager="[[tagManager]]"
+          tags="[[tags]]">
+        </tag-entity-buttons>
+      </template>
 
       <modal-icon
         icon="[[icon]]"
@@ -246,35 +290,53 @@ images = [{
         openable="[[_doesHaveDetails(details, detailExtractions, images)]]"
         open="[[_open]]">
       </modal-icon>
-
     </paper-material>
 
     <template is="dom-if" if="[[_doesHaveDetails(details, detailExtractions, images)]]">
       <iron-collapse id="details">
-        <detail-view
-          button-link="[[link]]"
-          button-text="Open [[type]]"
-          details="[[details]]"
-          detail-highlighted-text-property="[[detailHighlightedTextProperty]]"
-          detail-link-property="[[detailLinkProperty]]"
-          detail-name-property="[[detailNameProperty]]"
-          detail-text-property="[[detailTextProperty]]"
-          extractions="[[detailExtractions]]"
-          extraction-data-property="[[extractionDataProperty]]"
-          extraction-data-confidence-property="[[extractionDataConfidenceProperty]]"
-          extraction-data-highlight-property="[[extractionDataHighlightProperty]]"
-          extraction-data-icon-property="[[extractionDataIconProperty]]"
-          extraction-data-link-property="[[extractionDataLinkProperty]]"
-          extraction-data-style-class-property="[[extractionDataStyleClassProperty]]"
-          extraction-data-text-property="[[extractionDataTextProperty]]"
-          extraction-name-property="[[extractionNameProperty]]"
-          images="[[images]]"
-          image-link-property="[[imageLinkProperty]]"
-          image-source-property="[[imageSourceProperty]]"
-          small-image-style-class="[[smallImageStyleClass]]"
-          large-image-style-class="[[largeImageStyleClass]]"
-          new-tab="[[newTab]]">
-        </detail-view>
+        <paper-tabs class="flex" no-bar no-ink selected="{{selectedTab}}">
+          <paper-tab>Details</paper-tab>
+          <paper-tab>Cached Page (Warning: Runs External Scripts)</paper-tab>
+        </paper-tabs>
+        <template is="dom-if" if="[[_equals(0, selectedTab)]]">
+          <detail-view
+            button-link="[[link]]"
+            button-text="Open [[type]]"
+            tag-manager="[[tagManager]]"
+            details="[[details]]"
+            detail-highlighted-text-property="[[detailHighlightedTextProperty]]"
+            detail-link-property="[[detailLinkProperty]]"
+            detail-name-property="[[detailNameProperty]]"
+            detail-text-property="[[detailTextProperty]]"
+            extractions="[[detailExtractions]]"
+            extraction-data-property="[[extractionDataProperty]]"
+            extraction-data-classifications-property="[[extractionDataClassificationsProperty]]"
+            extraction-data-confidence-property="[[extractionDataConfidenceProperty]]"
+            extraction-data-highlight-property="[[extractionDataHighlightProperty]]"
+            extraction-data-icon-property="[[extractionDataIconProperty]]"
+            extraction-data-id-property="[[extractionDataIdProperty]]"
+            extraction-data-link-property="[[extractionDataLinkProperty]]"
+            extraction-data-provenances-property="[[extractionDataProvenancesProperty]]"
+            extraction-data-style-class-property="[[extractionDataStyleClassProperty]]"
+            extraction-data-text-property="[[extractionDataTextProperty]]"
+            extraction-name-property="[[extractionNameProperty]]"
+            extraction-provenance-highlight-tag="[[extractionProvenanceHighlightTag]]"
+            extraction-provenance-method-property="[[extractionProvenanceMethodProperty]]"
+            extraction-provenance-text-property="[[extractionProvenanceTextProperty]]"
+            images="[[images]]"
+            image-link-property="[[imageLinkProperty]]"
+            image-source-property="[[imageSourceProperty]]"
+            result-id="[[resultId]]"
+            small-image-style-class="[[smallImageStyleClass]]"
+            large-image-style-class="[[largeImageStyleClass]]"
+            new-tab="[[newTab]]">
+          </detail-view>
+        </template>
+        <template is="dom-if" if="[[_equals(1, selectedTab)]]">
+          <div class="cached-tab">
+            <iframe class="cached-frame" srcdoc="[[cachedPage]]"></iframe>
+          </div>
+        </template>
       </iron-collapse>
     </template>
   </template>
@@ -287,6 +349,19 @@ images = [{
       is: 'single-result',
 
       properties: {
+        /**
+         * (Optional)
+         *
+         * The HTML for the cached page.
+         *
+         * @type {String}
+         * @default ''
+         */
+        cachedPage: {
+          type: String,
+          value: ''
+        },
+
         /**
          * (Optional)
          *
@@ -355,6 +430,33 @@ images = [{
         /**
          * (Optional)
          *
+         * The ID of the result.
+         *
+         * @type {String}
+         * @default ''
+         */
+        resultId: {
+          type: String,
+          value: ''
+        },
+
+        /**
+         * (Optional|Output)
+         *
+         * The selected tab (0 = Details, 1 = Cached Page).
+         *
+         * @type {Number}
+         * @default 0
+         */
+        selectedTab: {
+          notify: true,
+          type: Number,
+          value: 0
+        },
+
+        /**
+         * (Optional)
+         *
          * The style class of the result icon.
          *
          * @type {String}
@@ -363,6 +465,28 @@ images = [{
         styleClass: {
           type: String,
           value: ''
+        },
+
+        /**
+         * (Optional)
+         *
+         * The tag manager object.
+         *
+         * @type {Object}
+         */
+        tagManager: {
+          type: Object
+        },
+
+        /**
+         * (Optional)
+         *
+         * The classification tags of the result.
+         *
+         * @type {Object}
+         */
+        tags: {
+          type: Object
         },
 
         /**
@@ -437,6 +561,19 @@ images = [{
         /**
          * (Optional)
          *
+         * The classifications property in the data objects from the extraction objects.
+         *
+         * @type {String}
+         * @default 'classifications'
+         */
+        extractionDataClassificationsProperty: {
+          type: String,
+          value: 'classifications'
+        },
+
+        /**
+         * (Optional)
+         *
          * The confidence property in the data objects from the extraction objects.  Supported confidence values are "high" and "low".
          *
          * @type {String}
@@ -476,6 +613,19 @@ images = [{
         /**
          * (Optional)
          *
+         * The ID property in the data objects from the extraction objects.
+         *
+         * @type {String}
+         * @default 'id'
+         */
+        extractionDataIdProperty: {
+          type: String,
+          value: 'id'
+        },
+
+        /**
+         * (Optional)
+         *
          * The link property in the data objects from the extraction objects.
          *
          * @type {String}
@@ -484,6 +634,19 @@ images = [{
         extractionDataLinkProperty: {
           type: String,
           value: 'link'
+        },
+
+        /**
+         * (Optional)
+         *
+         * The provenance property in the data objects from the extraction objects.
+         *
+         * @type {String}
+         * @default 'provenances'
+         */
+        extractionDataProvenancesProperty: {
+          type: String,
+          value: 'provenances'
         },
 
         /**
@@ -523,6 +686,43 @@ images = [{
         extractionNameProperty: {
           type: String,
           value: 'name'
+        },
+
+        /**
+         * (Optional)
+         *
+         * The provenance highlight tag.
+         *
+         * @type {String}
+         */
+        extractionProvenanceHighlightTag: {
+          type: String
+        },
+
+        /**
+         * (Optional)
+         *
+         * The method property in provenance objects from the data objects from the extraction objects.
+         *
+         * @type {String}
+         * @default 'method'
+         */
+        extractionProvenanceMethodProperty: {
+          type: String,
+          value: 'method'
+        },
+
+        /**
+         * (Optional)
+         *
+         * The text property in provenance objects from the data objects from the extraction objects.
+         *
+         * @type {String}
+         * @default 'text'
+         */
+        extractionProvenanceTextProperty: {
+          type: String,
+          value: 'text'
         },
 
         /**
@@ -755,6 +955,18 @@ images = [{
       },
 
       /**
+       * Returns whether the two arguments are equal.
+       *
+       * @param {Number} one
+       * @param {Number} two
+       * @return {Boolean}
+       * @private
+       */
+      _equals: function(one, two) {
+        return one === two;
+      },
+
+      /**
        * Returns the object in the given item at the given property.
        *
        * @param {Object} item
@@ -843,9 +1055,10 @@ images = [{
       toggleDetails: function(event) {
         if(this._doesHaveDetails(this.details, this.detailExtractions, this.images)) {
           var isButton = (event.target.localName === 'paper-button');
+          var isButtonLink = (event.target.parentElement && event.target.parentElement.localName === 'paper-icon-button');
           var isLink = (event.target.localName === 'a' || (event.target.parentElement && event.target.parentElement.localName === 'a'));
           // Do not open the result if the user clicked on a button or link inside the result (including the annotation).
-          if(!isButton && !isLink) {
+          if(!isButton && !isButtonLink && !isLink) {
             this.set('_open', !this._open);
             this.$$('#details').toggle();
           }
