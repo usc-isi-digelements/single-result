@@ -79,13 +79,14 @@ limitations under the License.
         expect(element.imageSourceProperty).to.equal('source');
         expect(element.smallImageStyleClass).to.equal('');
         expect(element.largeImageStyleClass).to.equal('');
+        expect(element.hideHeader).to.be.false;
         expect(element.highlightedTextTags).to.equal('em');
         expect(element.newTab).to.be.false;
+        expect(element.open).to.be.false;
         expect(element.selectedTab).to.equal(0);
         expect(element.tagManager).to.not.exist;
         expect(element.tags).to.not.exist;
         expect(element._hovering).to.be.false;
-        expect(element._open).to.be.false;
       });
 
       test('_imageSrc is set to blank', function() {
@@ -280,7 +281,7 @@ limitations under the License.
           }
         });
 
-        expect(element._open).to.be.false;
+        expect(element.open).to.be.false;
         expect(element.$$('paper-material').classList.contains('closed')).to.be.true;
         expect(element.$$('paper-material').classList.contains('opened')).to.be.false;
         expect(element.$$('iron-collapse')).to.not.exist;
@@ -641,7 +642,7 @@ limitations under the License.
 
         var detailsElement = element.$$('#details');
         element.transitionEndListener = function() {
-          expect(element._open).to.be.true;
+          expect(element.open).to.be.true;
           expect(element.$$('.result')).to.exist;
           expect(element.$$('.result').classList.contains('closed')).to.be.false;
           expect(element.$$('.result').classList.contains('opened')).to.be.true;
@@ -655,7 +656,7 @@ limitations under the License.
       });
 
       test('toggleDetails does close the details element', function(done) {
-        element._open = true;
+        element.open = true;
 
         var mockEvent = {
           target: {
@@ -673,7 +674,7 @@ limitations under the License.
           if(event.target.opened) {
             element.toggleDetails(mockEvent);
           } else {
-            expect(element._open).to.be.false;
+            expect(element.open).to.be.false;
             expect(element.$$('.result')).to.exist;
             expect(element.$$('.result').classList.contains('closed')).to.be.true;
             expect(element.$$('.result').classList.contains('opened')).to.be.false;
@@ -701,7 +702,7 @@ limitations under the License.
         element.listen(detailsElement, 'transitionend', 'transitionEndListener');
 
         element.toggleDetails(mockEvent);
-        expect(element._open).to.be.false;
+        expect(element.open).to.be.false;
         expect(element.$$('.result')).to.exist;
         expect(element.$$('.result').classList.contains('closed')).to.be.true;
         expect(element.$$('.result').classList.contains('opened')).to.be.false;
@@ -726,7 +727,7 @@ limitations under the License.
         element.listen(detailsElement, 'transitionend', 'transitionEndListener');
 
         element.toggleDetails(mockEvent);
-        expect(element._open).to.be.false;
+        expect(element.open).to.be.false;
         expect(element.$$('.result')).to.exist;
         expect(element.$$('.result').classList.contains('closed')).to.be.true;
         expect(element.$$('.result').classList.contains('opened')).to.be.false;
@@ -749,7 +750,7 @@ limitations under the License.
         element.listen(detailsElement, 'transitionend', 'transitionEndListener');
 
         element.toggleDetails(mockEvent);
-        expect(element._open).to.be.false;
+        expect(element.open).to.be.false;
         expect(element.$$('.result')).to.exist;
         expect(element.$$('.result').classList.contains('closed')).to.be.true;
         expect(element.$$('.result').classList.contains('opened')).to.be.false;
@@ -780,7 +781,7 @@ limitations under the License.
         element.listen(detailsElement, 'transitionend', 'transitionEndListener');
 
         element.toggleDetails(mockEvent);
-        expect(element._open).to.be.false;
+        expect(element.open).to.be.false;
         expect(element.$$('.result')).to.exist;
         expect(element.$$('.result').classList.contains('closed')).to.be.true;
         expect(element.$$('.result').classList.contains('opened')).to.be.false;

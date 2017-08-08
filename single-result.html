@@ -210,108 +210,105 @@ images = [{
 
       paper-tab:hover {
         background-color: rgba(0,0,0,0.05);
+        color: var(--primary-text-color);
       }
 
       paper-tab.iron-selected {
         background-color: rgba(0,0,0,0.1);
         color: var(--primary-text-color);
       }
-
-      tag-entity-buttons ::content .background {
-        background-color: var(--paper-grey-400);
-        border-radius: 5px;
-        line-height: 30px;
-        max-height: 60px;
-        padding: 5px;
-      }
     </style>
 
-    <paper-material
-      class$="layout horizontal flex result [[_getResultHeaderStyleClass(details, detailExtractions, images, _open)]]"
-      on-mouseover="_hoverStart"
-      on-mouseout="_hoverEnd"
-      on-tap="toggleDetails">
+    <template is="dom-if" if="[[!hideHeader]]">
+      <paper-material
+        class$="layout horizontal flex result [[_getResultHeaderStyleClass(details, detailExtractions, images, open)]]"
+        on-mouseover="_hoverStart"
+        on-mouseout="_hoverEnd"
+        on-tap="toggleDetails">
 
-      <div class="layout vertical center left-column">
-        <template is="dom-if" if="[[rank]]">
-          <div class="result-rank text border" title$="Search Result Score:  [[rank]]">
-            <strong>[[rank]]</strong>
-          </div>
-        </template>
-        <iron-image class$="[[smallImageStyleClass]] hide [[_showImageElement(images)]]" src="[[_imageSrc]]"></iron-image>
-      </div>
-
-      <div class="layout vertical flex">
-        <div class="layout horizontal">
-          <template is="dom-if" if="[[flag]]">
-            <div class="result-flag text border">
-              <strong>[[flag]]</strong>
+        <div class="layout vertical center left-column">
+          <template is="dom-if" if="[[rank]]">
+            <div class="result-rank text border" title$="Search Result Score:  [[rank]]">
+              <strong>[[rank]]</strong>
             </div>
           </template>
-          <div class="result-text text" title$="[[text]]">
-            <strong>
-              <template is="dom-if" if="[[link]]">
-                <a class="result-link" href$="[[link]]" target="[[_getTarget(newTab)]]" title="Open [[type]]">
-                  <highlighted-text tags="[[highlightedTextTags]]" text="[[_getResultHeaderText(text, highlightedText)]]"></highlighted-text>
-                </a>
-              </template>
-              <template is="dom-if" if="[[!link]]">
-                <highlighted-text tags="[[highlightedTextTags]]" text="[[_getResultHeaderText(text, highlightedText)]]"></highlighted-text>
-              </template>
-            </strong>
-          </div>
+          <iron-image class$="[[smallImageStyleClass]] hide [[_showImageElement(images)]]" src="[[_imageSrc]]"></iron-image>
         </div>
 
-        <template is="dom-if" if="[[headerExtractions.length]]">
-          <extraction-grid
-            extractions="[[headerExtractions]]"
-            data-property="[[extractionDataProperty]]"
-            data-classifications-property="[[extractionDataClassificationsProperty]]"
-            data-confidence-property="[[extractionDataConfidenceProperty]]"
-            data-highlight-property="[[extractionDataHighlightProperty]]"
-            data-icon-property="[[extractionDataIconProperty]]"
-            data-id-property="[[extractionDataIdProperty]]"
-            data-link-property="[[extractionDataLinkProperty]]"
-            data-provenances-property="[[extractionDataProvenancesProperty]]"
-            data-style-class-property="[[extractionDataStyleClassProperty]]"
-            data-text-property="[[extractionDataTextProperty]]"
-            data-type-property="[[extractionDataTypeProperty]]"
-            highlight-tag="[[extractionProvenanceHighlightTag]]"
-            name-property="[[extractionNameProperty]]"
-            provenance-method-property="[[extractionProvenanceMethodProperty]]"
-            provenance-text-property="[[extractionProvenanceTextProperty]]"
-            result-id="[[resultId]]"
-            result-type="[[type]]"
+        <div class="layout vertical flex">
+          <div class="layout horizontal">
+            <template is="dom-if" if="[[flag]]">
+              <div class="result-flag text border">
+                <strong>[[flag]]</strong>
+              </div>
+            </template>
+            <div class="result-text text" title$="[[text]]">
+              <strong>
+                <template is="dom-if" if="[[link]]">
+                  <a class="result-link" href$="[[link]]" target="[[_getTarget(newTab)]]" title="Open [[type]]">
+                    <highlighted-text tags="[[highlightedTextTags]]" text="[[_getResultHeaderText(text, highlightedText)]]"></highlighted-text>
+                  </a>
+                </template>
+                <template is="dom-if" if="[[!link]]">
+                  <highlighted-text tags="[[highlightedTextTags]]" text="[[_getResultHeaderText(text, highlightedText)]]"></highlighted-text>
+                </template>
+              </strong>
+            </div>
+          </div>
+
+          <template is="dom-if" if="[[headerExtractions.length]]">
+            <extraction-grid
+              extractions="[[headerExtractions]]"
+              data-property="[[extractionDataProperty]]"
+              data-classifications-property="[[extractionDataClassificationsProperty]]"
+              data-confidence-property="[[extractionDataConfidenceProperty]]"
+              data-highlight-property="[[extractionDataHighlightProperty]]"
+              data-icon-property="[[extractionDataIconProperty]]"
+              data-id-property="[[extractionDataIdProperty]]"
+              data-link-property="[[extractionDataLinkProperty]]"
+              data-provenances-property="[[extractionDataProvenancesProperty]]"
+              data-style-class-property="[[extractionDataStyleClassProperty]]"
+              data-text-property="[[extractionDataTextProperty]]"
+              data-type-property="[[extractionDataTypeProperty]]"
+              highlight-tag="[[extractionProvenanceHighlightTag]]"
+              name-property="[[extractionNameProperty]]"
+              provenance-method-property="[[extractionProvenanceMethodProperty]]"
+              provenance-text-property="[[extractionProvenanceTextProperty]]"
+              result-id="[[resultId]]"
+              result-type="[[type]]"
+              tag-manager="[[tagManager]]"
+              target="[[_getTarget(newTab)]]">
+            </extraction-grid>
+          </template>
+        </div>
+
+        <template is="dom-if" if="[[tagManager]]">
+          <tag-entity-buttons class="self-center"
+            entity-id="[[resultId]]"
+            entity-type="[[type]]"
             tag-manager="[[tagManager]]"
-            target="[[_getTarget(newTab)]]">
-          </extraction-grid>
+            tags="{{tags}}">
+          </tag-entity-buttons>
         </template>
-      </div>
 
-      <template is="dom-if" if="[[tagManager]]">
-        <tag-entity-buttons class="self-center"
-          entity-id="[[resultId]]"
-          entity-type="[[type]]"
-          tag-manager="[[tagManager]]"
-          tags="[[tags]]">
-        </tag-entity-buttons>
-      </template>
-
-      <modal-icon
-        icon="[[icon]]"
-        icon-style-class="[[styleClass]]"
-        show-icon="[[!_hovering]]"
-        openable="[[_doesHaveDetails(details, detailExtractions, images)]]"
-        open="[[_open]]">
-      </modal-icon>
-    </paper-material>
+        <modal-icon
+          icon="[[icon]]"
+          icon-style-class="[[styleClass]]"
+          show-icon="[[!_hovering]]"
+          openable="[[_doesHaveDetails(details, detailExtractions, images)]]"
+          open="[[open]]">
+        </modal-icon>
+      </paper-material>
+    </template>
 
     <template is="dom-if" if="[[_doesHaveDetails(details, detailExtractions, images)]]">
-      <iron-collapse id="details">
-        <paper-tabs class="flex" no-bar no-ink selected="{{selectedTab}}">
-          <paper-tab>Details</paper-tab>
-          <paper-tab>Cached Page (Warning: Runs External Scripts)</paper-tab>
-        </paper-tabs>
+      <iron-collapse id="details" opened="{{open}}">
+        <paper-material>
+          <paper-tabs class="flex" no-bar no-ink selected="{{selectedTab}}">
+            <paper-tab>Details</paper-tab>
+            <paper-tab>Cached Page (Warning: Runs External Scripts)</paper-tab>
+          </paper-tabs>
+        </paper-material>
         <template is="dom-if" if="[[_equals(0, selectedTab)]]">
           <detail-view
             button-link="[[link]]"
@@ -891,6 +888,19 @@ images = [{
         /**
          * (Optional)
          *
+         * Whether to hide the header.
+         *
+         * @type {Boolean}
+         * @default false
+         */
+        hideHeader: {
+          type: Boolean,
+          value: false
+        },
+
+        /**
+         * (Optional)
+         *
          * The highlighted text tags.  "This is <em>highlighted</em> text."
          *
          * @type {String}
@@ -910,6 +920,18 @@ images = [{
          * @default false
          */
         newTab: {
+          type: Boolean,
+          value: false
+        },
+
+        /**
+         * Whether the collapsible details are opened.
+         *
+         * @type {Boolean}
+         * @default false
+         * @private
+         */
+        open: {
           type: Boolean,
           value: false
         },
@@ -937,18 +959,6 @@ images = [{
           computed: '_computeImageSrc(images, imageSourceProperty)',
           type: String,
           value: ''
-        },
-
-        /**
-         * Whether the collapsible details are opened.
-         *
-         * @type {Boolean}
-         * @default false
-         * @private
-         */
-        _open: {
-          type: Boolean,
-          value: false
         }
       },
 
@@ -1088,8 +1098,7 @@ images = [{
           var isLink = (event.target.localName === 'a' || (event.target.parentElement && event.target.parentElement.localName === 'a'));
           // Do not open the result if the user clicked on a button or link inside the result (including the annotation).
           if(!isButton && !isButtonLink && !isLink) {
-            this.set('_open', !this._open);
-            this.$$('#details').toggle();
+            this.set('open', !this.open);
           }
         }
       }
