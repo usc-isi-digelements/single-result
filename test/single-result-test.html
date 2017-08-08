@@ -48,6 +48,7 @@ limitations under the License.
         expect(element.icon).to.equal('');
         expect(element.link).to.equal('');
         expect(element.rank).to.equal(0);
+        expect(element.resultId).to.equal('');
         expect(element.styleClass).to.equal('');
         expect(element.text).to.equal('');
         expect(element.type).to.equal('');
@@ -63,6 +64,7 @@ limitations under the License.
         expect(element.extractionDataProvenancesProperty).to.equal('provenances');
         expect(element.extractionDataStyleClassProperty).to.equal('styleClass');
         expect(element.extractionDataTextProperty).to.equal('text');
+        expect(element.extractionDataTypeProperty).to.equal('type');
         expect(element.extractionNameProperty).to.equal('name');
         expect(element.extractionProvenanceHighlightTags).to.not.exist;
         expect(element.extractionProvenanceMethodProperty).to.equal('method');
@@ -79,7 +81,6 @@ limitations under the License.
         expect(element.largeImageStyleClass).to.equal('');
         expect(element.highlightedTextTags).to.equal('em');
         expect(element.newTab).to.be.false;
-        expect(element.resultId).to.equal('');
         expect(element.selectedTab).to.equal(0);
         expect(element.tagManager).to.not.exist;
         expect(element.tags).to.not.exist;
@@ -295,6 +296,7 @@ limitations under the License.
         element.icon = 'myIcon';
         element.link = 'myLink';
         element.rank = 1.234;
+        element.resultId = '1234';
         element.styleClass = 'myStyleClass';
         element.text = 'myText';
         element.type = 'myType';
@@ -350,7 +352,6 @@ limitations under the License.
         element.extractionProvenanceHighlightTag = 'abcd';
         element.highlightedTextTags = 'highlight';
         element.newTab = true;
-        element.resultId = '1234';
         element.tagManager = {
           addListener: function() {},
           removeListener: function() {},
@@ -374,6 +375,7 @@ limitations under the License.
         expect(element.icon).to.equal('myIcon');
         expect(element.link).to.equal('myLink');
         expect(element.rank).to.equal(1.234);
+        expect(element.resultId).to.equal('1234');
         expect(element.styleClass).to.equal('myStyleClass');
         expect(element.text).to.equal('myText');
         expect(element.type).to.equal('myType');
@@ -429,7 +431,6 @@ limitations under the License.
         expect(element.extractionProvenanceHighlightTag).to.equal('abcd');
         expect(element.highlightedTextTags).to.equal('highlight');
         expect(element.newTab).to.be.true;
-        expect(element.resultId).to.equal('1234');
         expect(element.tagManager).to.exist;
         expect(element.tags).to.deep.equal({
           tag1: {
@@ -516,11 +517,13 @@ limitations under the License.
         expect(element.$$('extraction-grid').dataProvenancesProperty).to.equal('provenances');
         expect(element.$$('extraction-grid').dataStyleClassProperty).to.equal('styleClass');
         expect(element.$$('extraction-grid').dataTextProperty).to.equal('text');
+        expect(element.$$('extraction-grid').dataTypeProperty).to.equal('type');
         expect(element.$$('extraction-grid').highlightTag).to.equal('abcd');
         expect(element.$$('extraction-grid').nameProperty).to.equal('name');
         expect(element.$$('extraction-grid').provenanceMethodProperty).to.equal('method');
         expect(element.$$('extraction-grid').provenanceTextProperty).to.equal('text');
         expect(element.$$('extraction-grid').resultId).to.equal('1234');
+        expect(element.$$('extraction-grid').resultType).to.equal('myType');
         expect(element.$$('extraction-grid').tagManager).to.deep.equal(element.tagManager);
         expect(element.$$('extraction-grid').target).to.equal('_blank');
       });
@@ -582,6 +585,7 @@ limitations under the License.
         expect(element.$$('detail-view').extractionDataProvenancesProperty).to.equal('provenances');
         expect(element.$$('detail-view').extractionDataStyleClassProperty).to.equal('styleClass');
         expect(element.$$('detail-view').extractionDataTextProperty).to.equal('text');
+        expect(element.$$('detail-view').extractionDataTypeProperty).to.equal('type');
         expect(element.$$('detail-view').extractionNameProperty).to.equal('name');
         expect(element.$$('detail-view').extractionProvenanceHighlightTag).to.equal('abcd');
         expect(element.$$('detail-view').extractionProvenanceMethodProperty).to.equal('method');
@@ -592,6 +596,7 @@ limitations under the License.
         expect(element.$$('detail-view').largeImageStyleClass).to.equal('large');
         expect(element.$$('detail-view').newTab).to.be.true;
         expect(element.$$('detail-view').resultId).to.equal('1234');
+        expect(element.$$('detail-view').resultType).to.equal('myType');
         expect(element.$$('detail-view').tagManager).to.deep.equal(element.tagManager);
         expect(element.$$('detail-view').details).to.deep.equal([{
           name: 'myDetail1',

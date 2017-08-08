@@ -192,19 +192,29 @@ images = [{
       }
 
       .cached-tab {
-        width: 99%;
+        background-color: rgba(0,0,0,0.1);
         height: 400px;
         padding: 5px;
       }
 
       .cached-frame {
-        width: 100%;
+        background-color: white;
         height: 400px;
+        width: 100%;
+      }
+
+      paper-tab {
+        color: var(--secondary-text-color);
+        font-weight: 600;
+      }
+
+      paper-tab:hover {
+        background-color: rgba(0,0,0,0.05);
       }
 
       paper-tab.iron-selected {
         background-color: rgba(0,0,0,0.1);
-        font-weight: 600;
+        color: var(--primary-text-color);
       }
 
       tag-entity-buttons ::content .background {
@@ -265,11 +275,13 @@ images = [{
             data-provenances-property="[[extractionDataProvenancesProperty]]"
             data-style-class-property="[[extractionDataStyleClassProperty]]"
             data-text-property="[[extractionDataTextProperty]]"
+            data-type-property="[[extractionDataTypeProperty]]"
             highlight-tag="[[extractionProvenanceHighlightTag]]"
             name-property="[[extractionNameProperty]]"
             provenance-method-property="[[extractionProvenanceMethodProperty]]"
             provenance-text-property="[[extractionProvenanceTextProperty]]"
             result-id="[[resultId]]"
+            result-type="[[type]]"
             tag-manager="[[tagManager]]"
             target="[[_getTarget(newTab)]]">
           </extraction-grid>
@@ -279,6 +291,7 @@ images = [{
       <template is="dom-if" if="[[tagManager]]">
         <tag-entity-buttons class="self-center"
           entity-id="[[resultId]]"
+          entity-type="[[type]]"
           tag-manager="[[tagManager]]"
           tags="[[tags]]">
         </tag-entity-buttons>
@@ -320,6 +333,7 @@ images = [{
             extraction-data-provenances-property="[[extractionDataProvenancesProperty]]"
             extraction-data-style-class-property="[[extractionDataStyleClassProperty]]"
             extraction-data-text-property="[[extractionDataTextProperty]]"
+            extraction-data-type-property="[[extractionDataTypeProperty]]"
             extraction-name-property="[[extractionNameProperty]]"
             extraction-provenance-highlight-tag="[[extractionProvenanceHighlightTag]]"
             extraction-provenance-method-property="[[extractionProvenanceMethodProperty]]"
@@ -328,6 +342,7 @@ images = [{
             image-link-property="[[imageLinkProperty]]"
             image-source-property="[[imageSourceProperty]]"
             result-id="[[resultId]]"
+            result-type="[[type]]"
             small-image-style-class="[[smallImageStyleClass]]"
             large-image-style-class="[[largeImageStyleClass]]"
             new-tab="[[newTab]]">
@@ -674,6 +689,19 @@ images = [{
         extractionDataTextProperty: {
           type: String,
           value: 'text'
+        },
+
+        /**
+         * (Optional)
+         *
+         * The type property in the data objects from the extraction objects.
+         *
+         * @type {String}
+         * @default 'type'
+         */
+        extractionDataTypeProperty: {
+          type: String,
+          value: 'type'
         },
 
         /**
