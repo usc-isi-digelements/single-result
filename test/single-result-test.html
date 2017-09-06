@@ -89,8 +89,8 @@ limitations under the License.
         expect(element._hovering).to.be.false;
       });
 
-      test('_imageSrc is set to blank', function() {
-        expect(element._imageSrc).to.equal('');
+      test('_imageSrc is set to undefined', function() {
+        expect(element._imageSrc).to.be.undefined;
       });
 
       test('does have paper-material element', function() {

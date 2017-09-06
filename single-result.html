@@ -145,11 +145,11 @@ images = [{
       }
 
       .result-rank {
-        background-color:  var(--paper-grey-400);
+        background-color: var(--paper-grey-400);
       }
 
       .result-flag {
-        background-color:  var(--paper-red-200);
+        background-color: var(--paper-red-200);
         margin-right: 10px;
       }
 
@@ -977,7 +977,7 @@ images = [{
         if(images) {
           return undefined;
         }
-        return this._imageSrc;
+        return this._imageSrc || '';
       },
 
       /**

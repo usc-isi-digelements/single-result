@@ -18,117 +18,119 @@ limitations under the License.
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
-  <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
   <link rel="import" href="../single-result.html">
 </head>
 
 <body unresolved>
-  <template is="dom-bind" id="demo">
-    <p>Flag: Important</p>
-    <p>Highlighted Text: The &lt;em>highlighted&lt;/em> result text.</p>
-    <p>Icon: assignment</p>
-    <p>Link: https://nextcentury.com</p>
-    <p>Rank: 0.99</p>
-    <p>Type: Webpage</p>
-    <p>Header Extractions: [[stringify(headerExtractions)]]</p>
-    <p>Details: [[stringify(details)]]</p>
-    <p>Detail Extractions: [[stringify(detailExtractions)]]</p>
-    <p>Images: [[stringify(images)]]</p>
-    <p>New Tab: true</p>
-    <p>Cached Page: [[stringify(cachedPage)]]</p>
+  <dom-bind id="demo">
+    <script>
+      (function(document) {
+        var demo = document.querySelector('dom-bind');
 
-    <single-result
-      cached-page="[[cachedPage]]"
-      flag="Important"
-      highlighted-text="The <em>highlighted</em> result text."
-      icon="assignment"
-      link="https://nextcentury.com"
-      rank="0.99"
-      type="Sample"
-      header-extractions="[[headerExtractions]]"
-      details="[[details]]"
-      detail-extractions="[[detailExtractions]]"
-      images="[[images]]"
-      new-tab>
-    </single-result>
-  </template>
+        demo.cachedPage = '<h1>Header</h1><p>The cached page text</p>';
 
-  <script>
-    (function(document) {
-      var demo = document.querySelector('#demo');
-
-      demo.cachedPage = '<h1>Header</h1><p>The cached page text</p>';
-
-      demo.headerExtractions = [{
-        name: 'Header Extraction #1',
-        data: [{
-          confidence: 100,
-          highlight: true,
-          icon: 'star',
-          link: 'https://nextcentury.com',
-          text: 'Next Century'
+        demo.headerExtractions = [{
+          name: 'Header Extraction #1',
+          data: [{
+            confidence: 100,
+            highlight: true,
+            icon: 'star',
+            link: 'https://nextcentury.com',
+            text: 'Next Century'
+          }, {
+            confidence: 50,
+            icon: 'favorite',
+            link: 'https://github.com/DigElements',
+            text: 'DigElements'
+          }]
         }, {
-          confidence: 50,
-          icon: 'favorite',
+          name: 'Header Extraction #2',
+          data: [{
+            icon: 'error',
+            text: 'Example Extraction'
+          }]
+        }];
+
+        demo.details = [{
+          name: 'Detail #1',
+          text: 'This is unhighlighted text.'
+        }, {
+          name: 'Detail #2',
+          highlightedText: 'This is <em>highlighted</em> text.'
+        }];
+
+        demo.detailExtractions = [{
+          name: 'Detail Extraction #1',
+          data: [{
+            icon: 'link',
+            link: 'https://github.com/DigElements/single-result',
+            text: 'Single Result'
+          }]
+        }, {
+          name: 'Detail Extraction #2',
+          data: [{
+            icon: 'menu',
+            link: 'https://github.com/DigElements/detail-view',
+            text: 'Detail View'
+          }, {
+            icon: 'apps',
+            link: 'https://github.com/DigElements/extraction-grid',
+            text: 'Extraction Grid'
+          }, {
+            icon: 'text-format',
+            link: 'https://github.com/DigElements/highlighted-text',
+            text: 'Highlighted Text'
+          }, {
+            icon: 'face',
+            link: 'https://github.com/DigElements/modal-icon',
+            text: 'Modal Icon'
+          }]
+        }];
+
+        demo.images = [{
           link: 'https://github.com/DigElements',
-          text: 'DigElements'
-        }]
-      }, {
-        name: 'Header Extraction #2',
-        data: [{
-          icon: 'error',
-          text: 'Example Extraction'
-        }]
-      }];
-
-      demo.details = [{
-        name: 'Detail #1',
-        text: 'This is unhighlighted text.'
-      }, {
-        name: 'Detail #2',
-        highlightedText: 'This is <em>highlighted</em> text.'
-      }];
-
-      demo.detailExtractions = [{
-        name: 'Detail Extraction #1',
-        data: [{
-          icon: 'link',
-          link: 'https://github.com/DigElements/single-result',
-          text: 'Single Result'
-        }]
-      }, {
-        name: 'Detail Extraction #2',
-        data: [{
-          icon: 'menu',
-          link: 'https://github.com/DigElements/detail-view',
-          text: 'Detail View'
+          source: 'dig.png'
         }, {
-          icon: 'apps',
-          link: 'https://github.com/DigElements/extraction-grid',
-          text: 'Extraction Grid'
-        }, {
-          icon: 'text-format',
-          link: 'https://github.com/DigElements/highlighted-text',
-          text: 'Highlighted Text'
-        }, {
-          icon: 'face',
-          link: 'https://github.com/DigElements/modal-icon',
-          text: 'Modal Icon'
-        }]
-      }];
+          link: 'https://nextcentury.com',
+          source: 'NextCentury.png'
+        }];
 
-      demo.images = [{
-        link: 'https://github.com/DigElements',
-        source: 'dig.png'
-      }, {
-        link: 'https://nextcentury.com',
-        source: 'NextCentury.png'
-      }];
+        demo.stringify = function(object) {
+          return JSON.stringify(object);
+        };
+      })(document);
+    </script>
 
-      demo.stringify = function(object) {
-        return JSON.stringify(object);
-      };
-    })(document);
-  </script>
+    <template is="dom-bind">
+      <p>Flag: Important</p>
+      <p>Highlighted Text: The &lt;em>highlighted&lt;/em> result text.</p>
+      <p>Icon: assignment</p>
+      <p>Link: https://nextcentury.com</p>
+      <p>Rank: 0.99</p>
+      <p>Type: Webpage</p>
+      <p>Header Extractions: [[stringify(headerExtractions)]]</p>
+      <p>Details: [[stringify(details)]]</p>
+      <p>Detail Extractions: [[stringify(detailExtractions)]]</p>
+      <p>Images: [[stringify(images)]]</p>
+      <p>New Tab: true</p>
+      <p>Cached Page: [[stringify(cachedPage)]]</p>
+
+      <single-result
+        cached-page="[[cachedPage]]"
+        flag="Important"
+        highlighted-text="The <em>highlighted</em> result text."
+        icon="assignment"
+        link="https://nextcentury.com"
+        rank="0.99"
+        type="Sample"
+        header-extractions="[[headerExtractions]]"
+        details="[[details]]"
+        detail-extractions="[[detailExtractions]]"
+        images="[[images]]"
+        new-tab>
+      </single-result>
+    </template>
+  </dom-bind>
 </body>
 </html>
