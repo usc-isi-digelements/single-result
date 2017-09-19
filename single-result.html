@@ -227,6 +227,16 @@ images = [{
       paper-material {
         display: block;
       }
+
+      .small-blur {
+        -webkit-filter: blur(5px);
+        filter: blur(5px);
+      }
+
+      .large-blur {
+        -webkit-filter: blur(25px);
+        filter: blur(25px);
+      }
     </style>
 
     <template is="dom-if" if="[[!hideHeader]]">
