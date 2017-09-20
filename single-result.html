@@ -977,10 +977,15 @@ images = [{
          * @private
          */
         _imageSrc: {
-          computed: '_computeImageSrc(images, imageSourceProperty)',
-          type: String,
-          value: ''
+          type: String
         }
+      },
+
+      ready: function() {
+        // Load the image after the element is rendered.
+        Polymer.RenderStatus.afterNextRender(this, function() {
+          this.set('_imageSrc', this._computeImageSrc(this.images, this.imageSourceProperty));
+        });
       },
 
       /**
@@ -998,7 +1003,7 @@ images = [{
         if(images) {
           return undefined;
         }
-        return this._imageSrc || '';
+        return '';
       },
 
       /**
