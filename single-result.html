@@ -24,7 +24,6 @@ limitations under the License.
 <link rel="import" href="../iron-icon/iron-icon.html">
 <link rel="import" href="../iron-icons/iron-icons.html">
 <link rel="import" href="../iron-image/iron-image.html">
-<link rel="import" href="../iron-pages/iron-pages.html">
 <link rel="import" href="../modal-icon/modal-icon.html">
 <link rel="import" href="../paper-material/paper-material.html">
 <link rel="import" href="../paper-styles/color.html">
@@ -323,52 +322,54 @@ images = [{
 
     <template is="dom-if" if="[[_doesHaveDetails(details, detailExtractions, images)]]">
       <iron-collapse id="details" opened="{{open}}">
-        <paper-material>
-          <paper-tabs class="flex" no-bar no-ink selected="{{selectedTab}}">
-            <paper-tab>Details</paper-tab>
-            <paper-tab>Cached Page (Warning: Runs External Scripts)</paper-tab>
-          </paper-tabs>
-        </paper-material>
-        <template is="dom-if" if="[[_equals(0, selectedTab)]]">
-          <detail-view
-            button-link="[[link]]"
-            button-text="Open [[type]]"
-            tag-manager="[[tagManager]]"
-            details="[[details]]"
-            detail-highlighted-text-property="[[detailHighlightedTextProperty]]"
-            detail-link-property="[[detailLinkProperty]]"
-            detail-name-property="[[detailNameProperty]]"
-            detail-text-property="[[detailTextProperty]]"
-            extractions="[[detailExtractions]]"
-            extraction-data-property="[[extractionDataProperty]]"
-            extraction-data-classifications-property="[[extractionDataClassificationsProperty]]"
-            extraction-data-confidence-property="[[extractionDataConfidenceProperty]]"
-            extraction-data-highlight-property="[[extractionDataHighlightProperty]]"
-            extraction-data-icon-property="[[extractionDataIconProperty]]"
-            extraction-data-id-property="[[extractionDataIdProperty]]"
-            extraction-data-link-property="[[extractionDataLinkProperty]]"
-            extraction-data-provenances-property="[[extractionDataProvenancesProperty]]"
-            extraction-data-style-class-property="[[extractionDataStyleClassProperty]]"
-            extraction-data-text-property="[[extractionDataTextProperty]]"
-            extraction-data-type-property="[[extractionDataTypeProperty]]"
-            extraction-name-property="[[extractionNameProperty]]"
-            extraction-provenance-highlight-tag="[[extractionProvenanceHighlightTag]]"
-            extraction-provenance-method-property="[[extractionProvenanceMethodProperty]]"
-            extraction-provenance-text-property="[[extractionProvenanceTextProperty]]"
-            images="[[images]]"
-            image-link-property="[[imageLinkProperty]]"
-            image-source-property="[[imageSourceProperty]]"
-            result-id="[[resultId]]"
-            result-type="[[type]]"
-            small-image-style-class="[[smallImageStyleClass]]"
-            large-image-style-class="[[largeImageStyleClass]]"
-            new-tab="[[newTab]]">
-          </detail-view>
-        </template>
-        <template is="dom-if" if="[[_equals(1, selectedTab)]]">
-          <div class="cached-tab">
-            <iframe class="cached-frame" srcdoc="[[cachedPage]]"></iframe>
-          </div>
+        <template is="dom-if" if="[[open]]">
+          <paper-material>
+            <paper-tabs class="flex" no-bar no-ink selected="{{selectedTab}}">
+              <paper-tab>Details</paper-tab>
+              <paper-tab>Cached Page (Warning: Runs External Scripts)</paper-tab>
+            </paper-tabs>
+          </paper-material>
+          <template is="dom-if" if="[[_equals(0, selectedTab)]]">
+            <detail-view
+              button-link="[[link]]"
+              button-text="Open [[type]]"
+              tag-manager="[[tagManager]]"
+              details="[[details]]"
+              detail-highlighted-text-property="[[detailHighlightedTextProperty]]"
+              detail-link-property="[[detailLinkProperty]]"
+              detail-name-property="[[detailNameProperty]]"
+              detail-text-property="[[detailTextProperty]]"
+              extractions="[[detailExtractions]]"
+              extraction-data-property="[[extractionDataProperty]]"
+              extraction-data-classifications-property="[[extractionDataClassificationsProperty]]"
+              extraction-data-confidence-property="[[extractionDataConfidenceProperty]]"
+              extraction-data-highlight-property="[[extractionDataHighlightProperty]]"
+              extraction-data-icon-property="[[extractionDataIconProperty]]"
+              extraction-data-id-property="[[extractionDataIdProperty]]"
+              extraction-data-link-property="[[extractionDataLinkProperty]]"
+              extraction-data-provenances-property="[[extractionDataProvenancesProperty]]"
+              extraction-data-style-class-property="[[extractionDataStyleClassProperty]]"
+              extraction-data-text-property="[[extractionDataTextProperty]]"
+              extraction-data-type-property="[[extractionDataTypeProperty]]"
+              extraction-name-property="[[extractionNameProperty]]"
+              extraction-provenance-highlight-tag="[[extractionProvenanceHighlightTag]]"
+              extraction-provenance-method-property="[[extractionProvenanceMethodProperty]]"
+              extraction-provenance-text-property="[[extractionProvenanceTextProperty]]"
+              images="[[images]]"
+              image-link-property="[[imageLinkProperty]]"
+              image-source-property="[[imageSourceProperty]]"
+              result-id="[[resultId]]"
+              result-type="[[type]]"
+              small-image-style-class="[[smallImageStyleClass]]"
+              large-image-style-class="[[largeImageStyleClass]]"
+              new-tab="[[newTab]]">
+            </detail-view>
+          </template>
+          <template is="dom-if" if="[[_equals(1, selectedTab)]]">
+            <div class="cached-tab">
+              <iframe class="cached-frame" srcdoc="[[cachedPage]]"></iframe>
+            </div>
+          </template>
         </template>
       </iron-collapse>
     </template>
