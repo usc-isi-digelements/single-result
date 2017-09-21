@@ -210,9 +210,14 @@ images = [{
         width: 100%;
       }
 
+      paper-tabs: {
+        height: 40px;
+      }
+
       paper-tab {
         color: var(--secondary-text-color);
-        font-weight: 600;
+        font-weight: 500;
+        padding: 0 15px;
       }
 
       paper-tab:hover {
@@ -487,7 +492,7 @@ images = [{
         /**
          * (Output)
          *
-         * The provenance data and result ID to show in the provenance dialog.  An object containing {Array} data and {Number|String} id.
+         * The provenance data and result ID to show in the provenance dialog.  Contains {Number|String} confidence, {Array} data, and {Number|String} id.
          *
          * @type {Object}
          */
