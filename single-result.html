@@ -210,12 +210,13 @@ images = [{
         width: 100%;
       }
 
-      paper-tabs: {
+      paper-tabs {
         height: 40px;
       }
 
       paper-tab {
         color: var(--secondary-text-color);
+        font-size: 16px;
         font-weight: 500;
         padding: 0 15px;
       }
@@ -328,8 +329,8 @@ images = [{
         <template is="dom-if" if="[[open]]">
           <paper-material>
             <paper-tabs class="flex" no-bar no-ink selected="{{selectedTab}}">
-              <paper-tab>Details</paper-tab>
-              <paper-tab>Cached Page (Warning: Runs External Scripts)</paper-tab>
+              <paper-tab class="flex-1">Details</paper-tab>
+              <paper-tab class="flex-1">Cached Page (Warning: Runs External Scripts)</paper-tab>
             </paper-tabs>
           </paper-material>
           <template is="dom-if" if="[[_equals(0, selectedTab)]]">
