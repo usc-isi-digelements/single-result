@@ -139,6 +139,7 @@ images = [{
 
       .border {
         border-radius: 5px;
+        font-weight: 500;
         margin-bottom: 10px;
         padding: 0 5px;
       }
@@ -153,6 +154,7 @@ images = [{
       }
 
       .result-text {
+        font-weight: 500;
         /* Needed to fix flexbox layout issues in newer browsers. */
         display: -webkit-box;
         overflow: hidden;
@@ -248,7 +250,7 @@ images = [{
         <div class="layout vertical center left-column">
           <template is="dom-if" if="[[rank]]">
             <div class="result-rank text border" title$="Search Result Score:  [[rank]]">
-              <strong>[[rank]]</strong>
+              [[rank]]
             </div>
           </template>
           <iron-image class$="[[smallImageStyleClass]] hide [[_showImageElement(images)]]" src="[[_imageSrc]]"></iron-image>
@@ -258,20 +260,18 @@ images = [{
           <div class="layout horizontal">
             <template is="dom-if" if="[[flag]]">
               <div class="result-flag text border">
-                <strong>[[flag]]</strong>
+                [[flag]]
               </div>
             </template>
             <div class="result-text text" title$="[[text]]">
-              <strong>
-                <template is="dom-if" if="[[link]]">
-                  <a class="result-link" href$="[[link]]" target="[[_getTarget(newTab)]]" title="Open [[type]]">
-                    <highlighted-text tags="[[highlightedTextTags]]" text="[[_getResultHeaderText(text, highlightedText)]]"></highlighted-text>
-                  </a>
-                </template>
-                <template is="dom-if" if="[[!link]]">
+              <template is="dom-if" if="[[link]]">
+                <a class="result-link" href$="[[link]]" target="[[_getTarget(newTab)]]" title="Open [[type]]">
                   <highlighted-text tags="[[highlightedTextTags]]" text="[[_getResultHeaderText(text, highlightedText)]]"></highlighted-text>
-                </template>
-              </strong>
+                </a>
+              </template>
+              <template is="dom-if" if="[[!link]]">
+                <highlighted-text tags="[[highlightedTextTags]]" text="[[_getResultHeaderText(text, highlightedText)]]"></highlighted-text>
+              </template>
             </div>
           </div>
 
