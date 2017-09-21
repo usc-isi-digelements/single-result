@@ -169,7 +169,7 @@ limitations under the License.
         expect(element._computeImageSrc([])).to.not.exist;
       });
 
-      test('_computeImageSrc given undefined does return _imageSrc', function() {
+      test('_computeImageSrc given undefined does return a blank', function() {
         expect(element._computeImageSrc()).to.equal('');
       });
 
@@ -269,7 +269,7 @@ limitations under the License.
         }])).to.equal('show');
       });
 
-      test('toggleDetails does nothing if details, detailExtractions, and images are empty', function() {
+      test('toggleDetails does nothing if details, detailExtractions, and images are empty', function(done) {
         element.toggleDetails({
           target: {
             classList: {
@@ -282,9 +282,12 @@ limitations under the License.
         });
 
         expect(element.open).to.be.false;
-        expect(element.$$('paper-material').classList.contains('closed')).to.be.true;
-        expect(element.$$('paper-material').classList.contains('opened')).to.be.false;
-        expect(element.$$('iron-collapse')).to.not.exist;
+        flush(function() {
+          expect(element.$$('paper-material').classList.contains('closed')).to.be.true;
+          expect(element.$$('paper-material').classList.contains('opened')).to.be.false;
+          expect(element.$$('iron-collapse')).to.not.exist;
+          done();
+        });
       });
     });
 
@@ -442,8 +445,11 @@ limitations under the License.
         });
       });
 
-      test('_imageSrc is computed correctly', function() {
-        expect(element._imageSrc).to.equal('source1');
+      test('_imageSrc is set after the element is rendered', function(done) {
+        Polymer.RenderStatus.afterNextRender(element, function() {
+          expect(element._imageSrc).to.equal('source1');
+          done();
+        });
       });
 
       test('does have paper-material element', function() {
@@ -453,10 +459,13 @@ limitations under the License.
         expect(element.$$('paper-material').classList.contains('pointer')).to.be.true;
       });
 
-      test('does have iron-image element', function() {
-        expect(element.$$('iron-image')).to.exist;
-        expect(element.$$('iron-image').classList.contains('show')).to.be.true;
-        expect(element.$$('iron-image').src).to.equal('source1');
+      test('does have iron-image element', function(done) {
+        flush(function() {
+          expect(element.$$('iron-image')).to.exist;
+          expect(element.$$('iron-image').classList.contains('show')).to.be.true;
+          expect(element.$$('iron-image').src).to.equal('source1');
+          done();
+        });
       });
 
       test('does have modal-icon element', function() {
@@ -548,18 +557,38 @@ limitations under the License.
         expect(element.$$('iron-collapse').classList.contains('iron-collapse-opened')).to.be.false;
       });
 
-      test('does have paper-tabs element and two paper-tab elements', function() {
-        expect(element.$$('paper-tabs')).to.exist;
-        expect(element.$$('paper-tabs').selected).to.equal(0);
-        var tabs = Polymer.dom(element.root).querySelectorAll('paper-tab');
-        expect(tabs.length).to.equal(2);
+      test('does not have paper-tabs element because open is false', function() {
+        expect(element.$$('paper-tabs')).to.not.exist;
       });
 
-      test('does not have iframe because selectedTab is 0', function() {
+      test('does have paper-tabs element and two paper-tab elements', function(done) {
+        element.open = true;
+
+        flush(function() {
+          expect(element.$$('paper-tabs')).to.exist;
+          expect(element.$$('paper-tabs').selected).to.equal(0);
+          var tabs = Polymer.dom(element.root).querySelectorAll('paper-tab');
+          expect(tabs.length).to.equal(2);
+          done();
+        });
+      });
+
+      test('does not have iframe because open is false and selectedTab is 0', function() {
         expect(element.$$('iframe')).to.not.exist;
       });
 
-      test('does have iframe if selectedTab is 1', function(done) {
+      test('does not have iframe if open is true because selectedTab is 0', function() {
+        element.open = true;
+        expect(element.$$('iframe')).to.not.exist;
+      });
+
+      test('does not have iframe if selectedTab is 1 because open is false', function() {
+        element.selectedTab = 1;
+        expect(element.$$('iframe')).to.not.exist;
+      });
+
+      test('does have iframe if open is true and selectedTab is 1', function(done) {
+        element.open = true;
         element.selectedTab = 1;
         flush(function() {
           expect(element.$$('iframe')).to.exist;
@@ -568,64 +597,73 @@ limitations under the License.
         });
       });
 
-      test('does have detail-view element', function() {
-        expect(element.$$('detail-view')).to.exist;
-        expect(element.$$('detail-view').buttonLink).to.equal('myLink');
-        expect(element.$$('detail-view').buttonText).to.equal('Open myType');
-        expect(element.$$('detail-view').detailHighlightedTextProperty).to.equal('highlightedText');
-        expect(element.$$('detail-view').detailLinkProperty).to.equal('link');
-        expect(element.$$('detail-view').detailNameProperty).to.equal('name');
-        expect(element.$$('detail-view').detailTextProperty).to.equal('text');
-        expect(element.$$('detail-view').extractionDataProperty).to.equal('data');
-        expect(element.$$('detail-view').extractionDataClassificationsProperty).to.equal('classifications');
-        expect(element.$$('detail-view').extractionDataConfidenceProperty).to.equal('confidence');
-        expect(element.$$('detail-view').extractionDataHighlightProperty).to.equal('highlight');
-        expect(element.$$('detail-view').extractionDataIconProperty).to.equal('icon');
-        expect(element.$$('detail-view').extractionDataIdProperty).to.equal('id');
-        expect(element.$$('detail-view').extractionDataLinkProperty).to.equal('link');
-        expect(element.$$('detail-view').extractionDataProvenancesProperty).to.equal('provenances');
-        expect(element.$$('detail-view').extractionDataStyleClassProperty).to.equal('styleClass');
-        expect(element.$$('detail-view').extractionDataTextProperty).to.equal('text');
-        expect(element.$$('detail-view').extractionDataTypeProperty).to.equal('type');
-        expect(element.$$('detail-view').extractionNameProperty).to.equal('name');
-        expect(element.$$('detail-view').extractionProvenanceHighlightTag).to.equal('abcd');
-        expect(element.$$('detail-view').extractionProvenanceMethodProperty).to.equal('method');
-        expect(element.$$('detail-view').extractionProvenanceTextProperty).to.equal('text');
-        expect(element.$$('detail-view').imageLinkProperty).to.equal('link');
-        expect(element.$$('detail-view').imageSourceProperty).to.equal('source');
-        expect(element.$$('detail-view').smallImageStyleClass).to.equal('small');
-        expect(element.$$('detail-view').largeImageStyleClass).to.equal('large');
-        expect(element.$$('detail-view').newTab).to.be.true;
-        expect(element.$$('detail-view').resultId).to.equal('1234');
-        expect(element.$$('detail-view').resultType).to.equal('myType');
-        expect(element.$$('detail-view').tagManager).to.deep.equal(element.tagManager);
-        expect(element.$$('detail-view').details).to.deep.equal([{
-          name: 'myDetail1',
-          text: 'myDetailText1',
-        }, {
-          name: 'myDetail2',
-          highlightedText: '<highlight>myDetailText2</highlight>'
-        }]);
-        expect(element.$$('detail-view').extractions).to.deep.equal([{
-          name: 'myDetailExtraction1',
-          data: [{
-            text: 'myDetailExtractionText1'
+      test('does not have detail-view element because open is false', function() {
+        expect(element.$$('detail-view')).to.not.exist;
+      });
+
+      test('does have detail-view element', function(done) {
+        element.open = true;
+
+        flush(function() {
+          expect(element.$$('detail-view')).to.exist;
+          expect(element.$$('detail-view').buttonLink).to.equal('myLink');
+          expect(element.$$('detail-view').buttonText).to.equal('Open myType');
+          expect(element.$$('detail-view').detailHighlightedTextProperty).to.equal('highlightedText');
+          expect(element.$$('detail-view').detailLinkProperty).to.equal('link');
+          expect(element.$$('detail-view').detailNameProperty).to.equal('name');
+          expect(element.$$('detail-view').detailTextProperty).to.equal('text');
+          expect(element.$$('detail-view').extractionDataProperty).to.equal('data');
+          expect(element.$$('detail-view').extractionDataClassificationsProperty).to.equal('classifications');
+          expect(element.$$('detail-view').extractionDataConfidenceProperty).to.equal('confidence');
+          expect(element.$$('detail-view').extractionDataHighlightProperty).to.equal('highlight');
+          expect(element.$$('detail-view').extractionDataIconProperty).to.equal('icon');
+          expect(element.$$('detail-view').extractionDataIdProperty).to.equal('id');
+          expect(element.$$('detail-view').extractionDataLinkProperty).to.equal('link');
+          expect(element.$$('detail-view').extractionDataProvenancesProperty).to.equal('provenances');
+          expect(element.$$('detail-view').extractionDataStyleClassProperty).to.equal('styleClass');
+          expect(element.$$('detail-view').extractionDataTextProperty).to.equal('text');
+          expect(element.$$('detail-view').extractionDataTypeProperty).to.equal('type');
+          expect(element.$$('detail-view').extractionNameProperty).to.equal('name');
+          expect(element.$$('detail-view').extractionProvenanceHighlightTag).to.equal('abcd');
+          expect(element.$$('detail-view').extractionProvenanceMethodProperty).to.equal('method');
+          expect(element.$$('detail-view').extractionProvenanceTextProperty).to.equal('text');
+          expect(element.$$('detail-view').imageLinkProperty).to.equal('link');
+          expect(element.$$('detail-view').imageSourceProperty).to.equal('source');
+          expect(element.$$('detail-view').smallImageStyleClass).to.equal('small');
+          expect(element.$$('detail-view').largeImageStyleClass).to.equal('large');
+          expect(element.$$('detail-view').newTab).to.be.true;
+          expect(element.$$('detail-view').resultId).to.equal('1234');
+          expect(element.$$('detail-view').resultType).to.equal('myType');
+          expect(element.$$('detail-view').tagManager).to.deep.equal(element.tagManager);
+          expect(element.$$('detail-view').details).to.deep.equal([{
+            name: 'myDetail1',
+            text: 'myDetailText1',
           }, {
-            text: 'myDetailExtractionText2'
-          }]
-        }, {
-          name: 'myDetailExtraction2',
-          data: [{
-            text: 'myDetailExtractionText3'
+            name: 'myDetail2',
+            highlightedText: '<highlight>myDetailText2</highlight>'
+          }]);
+          expect(element.$$('detail-view').extractions).to.deep.equal([{
+            name: 'myDetailExtraction1',
+            data: [{
+              text: 'myDetailExtractionText1'
+            }, {
+              text: 'myDetailExtractionText2'
+            }]
           }, {
-            text: 'myDetailExtractionText4'
-          }]
-        }]);
-        expect(element.$$('detail-view').images).to.deep.equal([{
-          source: 'source1'
-        }, {
-          source: 'source2'
-        }]);
+            name: 'myDetailExtraction2',
+            data: [{
+              text: 'myDetailExtractionText3'
+            }, {
+              text: 'myDetailExtractionText4'
+            }]
+          }]);
+          expect(element.$$('detail-view').images).to.deep.equal([{
+            source: 'source1'
+          }, {
+            source: 'source2'
+          }]);
+          done();
+        });
       });
 
       test('toggleDetails does open the details element', function(done) {
@@ -640,19 +678,19 @@ limitations under the License.
           }
         };
 
-        var detailsElement = element.$$('#details');
-        element.transitionEndListener = function() {
+        element.toggleDetails(mockEvent);
+
+        flush(function() {
           expect(element.open).to.be.true;
           expect(element.$$('.result')).to.exist;
           expect(element.$$('.result').classList.contains('closed')).to.be.false;
           expect(element.$$('.result').classList.contains('opened')).to.be.true;
+          var detailsElement = element.$$('#details');
           expect(detailsElement).to.exist;
           expect(detailsElement.classList.contains('iron-collapse-closed')).to.be.false;
           expect(detailsElement.classList.contains('iron-collapse-opened')).to.be.true;
           done();
-        };
-        element.listen(detailsElement, 'transitionend', 'transitionEndListener');
-        element.toggleDetails(mockEvent);
+        });
       });
 
       test('toggleDetails does close the details element', function(done) {
@@ -669,23 +707,19 @@ limitations under the License.
           }
         };
 
-        var detailsElement = element.$$('#details');
-        element.transitionEndListener = function(event) {
-          if(event.target.opened) {
-            element.toggleDetails(mockEvent);
-          } else {
-            expect(element.open).to.be.false;
-            expect(element.$$('.result')).to.exist;
-            expect(element.$$('.result').classList.contains('closed')).to.be.true;
-            expect(element.$$('.result').classList.contains('opened')).to.be.false;
-            expect(detailsElement).to.exist;
-            expect(detailsElement.classList.contains('iron-collapse-closed')).to.be.true;
-            expect(detailsElement.classList.contains('iron-collapse-opened')).to.be.false;
-            done();
-          }
-        };
-        element.listen(detailsElement, 'transitionend', 'transitionEndListener');
-        detailsElement.show();
+        element.toggleDetails(mockEvent);
+
+        flush(function() {
+          expect(element.open).to.be.false;
+          expect(element.$$('.result')).to.exist;
+          expect(element.$$('.result').classList.contains('closed')).to.be.true;
+          expect(element.$$('.result').classList.contains('opened')).to.be.false;
+          var detailsElement = element.$$('#details');
+          expect(detailsElement).to.exist;
+          expect(detailsElement.classList.contains('iron-collapse-closed')).to.be.true;
+          expect(detailsElement.classList.contains('iron-collapse-opened')).to.be.false;
+          done();
+        });
       });
 
       test('toggleDetails does nothing if a paper-button is clicked', function() {
