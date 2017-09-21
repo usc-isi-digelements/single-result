@@ -289,12 +289,10 @@ images = [{
               data-style-class-property="[[extractionDataStyleClassProperty]]"
               data-text-property="[[extractionDataTextProperty]]"
               data-type-property="[[extractionDataTypeProperty]]"
-              highlight-tag="[[extractionProvenanceHighlightTag]]"
               name-property="[[extractionNameProperty]]"
-              provenance-method-property="[[extractionProvenanceMethodProperty]]"
-              provenance-text-property="[[extractionProvenanceTextProperty]]"
               result-id="[[resultId]]"
               result-type="[[type]]"
+              show-provenances="{{showProvenances}}"
               tag-manager="[[tagManager]]"
               target="[[_getTarget(newTab)]]">
             </extraction-grid>
@@ -352,14 +350,12 @@ images = [{
               extraction-data-text-property="[[extractionDataTextProperty]]"
               extraction-data-type-property="[[extractionDataTypeProperty]]"
               extraction-name-property="[[extractionNameProperty]]"
-              extraction-provenance-highlight-tag="[[extractionProvenanceHighlightTag]]"
-              extraction-provenance-method-property="[[extractionProvenanceMethodProperty]]"
-              extraction-provenance-text-property="[[extractionProvenanceTextProperty]]"
               images="[[images]]"
               image-link-property="[[imageLinkProperty]]"
               image-source-property="[[imageSourceProperty]]"
               result-id="[[resultId]]"
               result-type="[[type]]"
+              show-provenances="{{showProvenances}}"
               small-image-style-class="[[smallImageStyleClass]]"
               large-image-style-class="[[largeImageStyleClass]]"
               new-tab="[[newTab]]">
@@ -486,6 +482,18 @@ images = [{
           notify: true,
           type: Number,
           value: 0
+        },
+
+        /**
+         * (Output)
+         *
+         * The provenance data and result ID to show in the provenance dialog.  An object containing {Array} data and {Number|String} id.
+         *
+         * @type {Object}
+         */
+        showProvenances: {
+          notify: true,
+          type: Object
         },
 
         /**
@@ -733,43 +741,6 @@ images = [{
         extractionNameProperty: {
           type: String,
           value: 'name'
-        },
-
-        /**
-         * (Optional)
-         *
-         * The provenance highlight tag.
-         *
-         * @type {String}
-         */
-        extractionProvenanceHighlightTag: {
-          type: String
-        },
-
-        /**
-         * (Optional)
-         *
-         * The method property in provenance objects from the data objects from the extraction objects.
-         *
-         * @type {String}
-         * @default 'method'
-         */
-        extractionProvenanceMethodProperty: {
-          type: String,
-          value: 'method'
-        },
-
-        /**
-         * (Optional)
-         *
-         * The text property in provenance objects from the data objects from the extraction objects.
-         *
-         * @type {String}
-         * @default 'text'
-         */
-        extractionProvenanceTextProperty: {
-          type: String,
-          value: 'text'
         },
 
         /**
