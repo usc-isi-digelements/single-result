@@ -1,7 +1,7 @@
 {
   "name": "single-result",
   "description": "A Polymer Element showing a single stylized result with details, extractions, images, and other optional information.",
-  "version": "2.2.4",
+  "version": "2.2.5",
   "authors": ["Next Century Corporation"],
   "license": "Apache-2.0",
   "keywords": [

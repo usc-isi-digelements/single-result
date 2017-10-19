@@ -369,7 +369,7 @@ images = [{
           </template>
           <template is="dom-if" if="[[_equals(1, selectedTab)]]">
             <div class="cached-tab">
-              <iframe class="cached-frame" srcdoc="[[cachedPage]]"></iframe>
+              <iframe class="cached-frame" sandbox="" srcdoc="[[cachedPage]]"></iframe>
             </div>
           </template>
         </template>
