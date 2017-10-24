@@ -65,6 +65,7 @@ limitations under the License.
         expect(element.extractionDataStyleClassProperty).to.equal('styleClass');
         expect(element.extractionDataTextProperty).to.equal('text');
         expect(element.extractionDataTypeProperty).to.equal('type');
+        expect(element.extractionDataWidthProperty).to.equal('width');
         expect(element.extractionNameProperty).to.equal('name');
         expect(element.details).to.deep.equal([]);
         expect(element.detailHighlightedTextProperty).to.equal('highlightedText');
@@ -524,6 +525,7 @@ limitations under the License.
         expect(element.$$('extraction-grid').dataStyleClassProperty).to.equal('styleClass');
         expect(element.$$('extraction-grid').dataTextProperty).to.equal('text');
         expect(element.$$('extraction-grid').dataTypeProperty).to.equal('type');
+        expect(element.$$('extraction-grid').dataWidthProperty).to.equal('width');
         expect(element.$$('extraction-grid').nameProperty).to.equal('name');
         expect(element.$$('extraction-grid').resultId).to.equal('1234');
         expect(element.$$('extraction-grid').resultType).to.equal('myType');
@@ -616,6 +618,7 @@ limitations under the License.
           expect(element.$$('detail-view').extractionDataStyleClassProperty).to.equal('styleClass');
           expect(element.$$('detail-view').extractionDataTextProperty).to.equal('text');
           expect(element.$$('detail-view').extractionDataTypeProperty).to.equal('type');
+          expect(element.$$('detail-view').extractionDataWidthProperty).to.equal('width');
           expect(element.$$('detail-view').extractionNameProperty).to.equal('name');
           expect(element.$$('detail-view').imageLinkProperty).to.equal('link');
           expect(element.$$('detail-view').imageSourceProperty).to.equal('source');

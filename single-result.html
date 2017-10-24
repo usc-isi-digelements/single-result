@@ -295,6 +295,7 @@ images = [{
               data-style-class-property="[[extractionDataStyleClassProperty]]"
               data-text-property="[[extractionDataTextProperty]]"
               data-type-property="[[extractionDataTypeProperty]]"
+              data-width-property="[[extractionDataWidthProperty]]"
               name-property="[[extractionNameProperty]]"
               result-id="[[resultId]]"
               result-type="[[type]]"
@@ -355,6 +356,7 @@ images = [{
               extraction-data-style-class-property="[[extractionDataStyleClassProperty]]"
               extraction-data-text-property="[[extractionDataTextProperty]]"
               extraction-data-type-property="[[extractionDataTypeProperty]]"
+              extraction-data-width-property="[[extractionDataWidthProperty]]"
               extraction-name-property="[[extractionNameProperty]]"
               images="[[images]]"
               image-link-property="[[imageLinkProperty]]"
@@ -734,6 +736,19 @@ images = [{
         extractionDataTypeProperty: {
           type: String,
           value: 'type'
+        },
+
+        /**
+         * (Optional)
+         *
+         * The width property in the data objects from the extraction objects.
+         *
+         * @type {String}
+         * @default 'width'
+         */
+        extractionDataWidthProperty: {
+          type: String,
+          value: 'width'
         },
 
         /**
