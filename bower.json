@@ -16,7 +16,6 @@
   ],
   "dependencies": {
     "polymer": "Polymer/polymer#^2.0.2",
-    "build-and-run-query": "DigElements/build-and-run-query#2.3.0",
     "detail-view": "DigElements/detail-view#2.2.5",
     "extraction-grid": "DigElements/extraction-grid#2.2.4",
     "highlighted-text": "DigElements/highlighted-text#2.2.0",
