@@ -114,14 +114,10 @@ images = [{
         background-color: rgba(0,0,0,0.1);
       }
 
-      .left-column {
-        margin-right: 10px;
-      }
-
-      iron-image {
+      .preview-image {
         --iron-image-width: 50px;
         background-color: transparent;
-        margin: 5px;
+        margin-right: 10px;
       }
 
       .opened iron-image,
@@ -130,31 +126,39 @@ images = [{
         background-color: initial;
       }
 
-      .text {
-        font-size: 18px;
-        line-height: 30px;
-        min-height: 30px;
+      .small-text,
+      .large-text {
+        line-height: 20px;
+        min-height: 20px;
       }
 
-      .border {
+      .small-text {
+        font-size: 14px;
+      }
+
+      .large-text {
+        font-size: 16px;
+        font-weight: 500;
+      }
+
+      .result-rank,
+      .result-flag {
         border-radius: 2px;
         font-weight: 500;
-        margin-bottom: 10px;
+        margin-right: 10px;
         padding: 0 5px;
       }
 
       .result-rank {
         background-color: var(--paper-grey-400);
+        margin-bottom: 10px;
       }
 
       .result-flag {
         background-color: var(--paper-red-200);
-        margin-right: 10px;
       }
 
       .result-text {
-        font-weight: 500;
-        margin-bottom: 5px;
         /* Needed to fix flexbox layout issues in newer browsers. */
         display: -webkit-box;
         overflow: hidden;
@@ -244,6 +248,96 @@ images = [{
         -webkit-filter: blur(25px);
         filter: blur(25px);
       }
+
+      iron-icon {
+        --iron-icon-height: 20px;
+        --iron-icon-width: 20px;
+        margin-right: 10px;
+      }
+
+      iron-icon.amber {
+        color: var(--paper-amber-600);
+      }
+
+      iron-icon.black {
+        color: #111;
+      }
+
+      iron-icon.blue {
+        color: var(--paper-blue-600);
+      }
+
+      iron-icon.blue-grey {
+        color: var(--paper-blue-grey-600);
+      }
+
+      iron-icon.brown {
+        color: var(--paper-brown-600);
+      }
+
+      iron-icon.cyan {
+        color: var(--paper-cyan-600);
+      }
+
+      iron-icon.deep-orange {
+        color: var(--paper-deep-orange-600);
+      }
+
+      iron-icon.deep-purple {
+        color: var(--paper-deep-purple-600);
+      }
+
+      iron-icon.green {
+        color: var(--paper-green-600);
+      }
+
+      iron-icon.grey {
+        color: var(--paper-grey-600);
+      }
+
+      iron-icon.indigo {
+        color: var(--paper-indigo-600);
+      }
+
+      iron-icon.light-blue {
+        color: var(--paper-light-blue-600);
+      }
+
+      iron-icon.light-green {
+        color: var(--paper-light-green-600);
+      }
+
+      iron-icon.lime {
+        color: var(--paper-lime-600);
+      }
+
+      iron-icon.orange {
+        color: var(--paper-orange-600);
+      }
+
+      iron-icon.pink {
+        color: var(--paper-pink-600);
+      }
+
+      iron-icon.purple {
+        color: var(--paper-purple-600);
+      }
+
+      iron-icon.red {
+        color: var(--paper-red-600);
+      }
+
+      iron-icon.teal {
+        color: var(--paper-teal-600);
+      }
+
+      iron-icon.white {
+        color: #fff;
+      }
+
+      iron-icon.yellow {
+        color: var(--paper-yellow-600);
+      }
     </style>
 
     <template is="dom-if" if="[[!hideHeader]]">
@@ -253,36 +347,55 @@ images = [{
         on-mouseout="_hoverEnd"
         on-tap="toggleDetails">
 
-        <div class="layout vertical center left-column">
+        <div class="layout vertical center">
           <template is="dom-if" if="[[rank]]">
-            <div class="result-rank text border" title$="Search Result Score:  [[rank]]">
+            <div class="result-rank small-text" title$="Search Result Score:  [[rank]]">
               [[rank]]
             </div>
           </template>
-          <iron-image class$="[[smallImageStyleClass]] hide [[_showImageElement(images)]]" src="[[_imageSrc]]"></iron-image>
+          <iron-image class$="preview-image [[smallImageStyleClass]] hide [[_showImageElement(images, compressed)]]" src="[[_imageSrc]]"></iron-image>
         </div>
 
         <div class="layout vertical flex">
-          <div class="layout horizontal">
+          <div class="layout horizontal center">
             <template is="dom-if" if="[[flag]]">
-              <div class="result-flag text border">
+              <div class="result-flag small-text">
                 [[flag]]
               </div>
             </template>
-            <div class="result-text text" title$="[[text]]">
-              <template is="dom-if" if="[[link]]">
-                <a class="result-link" href$="[[link]]" target="[[_getTarget(newTab)]]" title="Open [[type]]">
-                  <highlighted-text tags="[[highlightedTextTags]]" text="[[_getResultHeaderText(text, highlightedText)]]"></highlighted-text>
-                </a>
-              </template>
-              <template is="dom-if" if="[[!link]]">
-                <highlighted-text tags="[[highlightedTextTags]]" text="[[_getResultHeaderText(text, highlightedText)]]"></highlighted-text>
-              </template>
-            </div>
+
+            <template is="dom-if" if="[[link]]">
+              <a class="layout horizontal center result-link" href$="[[link]]" target="[[_getTarget(newTab)]]" title$="Open This [[name]]">
+                <template is="dom-if" if="[[icon]]">
+                  <iron-icon class$="[[styleClass]]" icon="[[icon]]"></iron-icon>
+                </template>
+                <template is="dom-if" if="[[_getResultHeaderText(text, highlightedText)]]">
+                  <highlighted-text class="result-text large-text" tags="[[highlightedTextTags]]" text="[[_getResultHeaderText(text, highlightedText)]]"></highlighted-text>
+                </template>
+                <template is="dom-if" if="[[!_getResultHeaderText(text, highlightedText)]]">
+                  <div class="result-text small-text">Open This [[name]]</div>
+                </template>
+              </a>
+            </template>
+
+            <template is="dom-if" if="[[!link]]">
+              <div class="layout horizontal center" title$="[[text]]">
+                <template is="dom-if" if="[[icon]]">
+                  <iron-icon class$="[[styleClass]]" icon="[[icon]]"></iron-icon>
+                </template>
+                <template is="dom-if" if="[[_getResultHeaderText(text, highlightedText)]]">
+                  <highlighted-text class="result-text large-text" tags="[[highlightedTextTags]]" text="[[_getResultHeaderText(text, highlightedText)]]"></highlighted-text>
+                </template>
+                <template is="dom-if" if="[[!_getResultHeaderText(text, highlightedText)]]">
+                  <div class="result-text small-text">[[name]]</div>
+                </template>
+              </div>
+            </template>
           </div>
 
           <template is="dom-if" if="[[headerExtractions.length]]">
             <extraction-grid
+              compressed="[[compressed]]"
               extractions="[[headerExtractions]]"
               data-property="[[extractionDataProperty]]"
               data-classifications-property="[[extractionDataClassificationsProperty]]"
@@ -316,9 +429,6 @@ images = [{
         </template>
 
         <modal-icon
-          icon="[[icon]]"
-          icon-style-class="[[styleClass]]"
-          show-icon="[[!_hovering]]"
           openable="[[_doesHaveDetails(details, detailExtractions, images)]]"
           open="[[open]]">
         </modal-icon>
@@ -336,8 +446,6 @@ images = [{
           </paper-material>
           <template is="dom-if" if="[[_equals(0, selectedTab)]]">
             <detail-view
-              button-link="[[link]]"
-              button-text="Open [[type]]"
               tag-manager="[[tagManager]]"
               details="[[details]]"
               detail-highlighted-text-property="[[detailHighlightedTextProperty]]"
@@ -367,6 +475,8 @@ images = [{
               small-image-style-class="[[smallImageStyleClass]]"
               large-image-style-class="[[largeImageStyleClass]]"
               new-tab="[[newTab]]">
+
+              <slot></slot>
             </detail-view>
           </template>
           <template is="dom-if" if="[[_equals(1, selectedTab)]]">
@@ -398,6 +508,19 @@ images = [{
         cachedPage: {
           type: String,
           value: ''
+        },
+
+        /**
+         * (Optional)
+         *
+         * Whether to show the compressed single-record.
+         *
+         * @type {Boolean}
+         * @default false
+         */
+        compressed: {
+          type: Boolean,
+          value: false
         },
 
         /**
@@ -450,6 +573,19 @@ images = [{
         link: {
           type: String,
           value: ''
+        },
+
+        /**
+         * (Optional)
+         *
+         * The name of the result.
+         *
+         * @type {String}
+         * @default 'Result'
+         */
+        name: {
+          type: String,
+          value: 'Result'
         },
 
         /**
@@ -945,6 +1081,7 @@ images = [{
          * @private
          */
         open: {
+          notify: true,
           type: Boolean,
           value: false
         },
@@ -1097,11 +1234,12 @@ images = [{
        * Returns whether or not to show the iron-image element in the result header based on whether the list of images is set.
        *
        * @param {Array} images
+       * @param {Boolean} compressed
        * @return {String}
        * @private
        */
-      _showImageElement: function(images) {
-        return images ? 'show' : '';
+      _showImageElement: function(images, compressed) {
+        return images && !compressed ? 'show' : '';
       },
 
       /**

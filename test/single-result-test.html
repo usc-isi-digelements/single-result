@@ -43,10 +43,12 @@ limitations under the License.
 
       test('default properties are set correctly', function() {
         expect(element.cachedPage).to.equal('');
+        expect(element.compressed).to.be.false;
         expect(element.flag).to.equal('');
         expect(element.highlightedText).to.equal('');
         expect(element.icon).to.equal('');
         expect(element.link).to.equal('');
+        expect(element.name).to.equal('Result');
         expect(element.rank).to.equal(0);
         expect(element.resultId).to.equal('');
         expect(element.styleClass).to.equal('');
@@ -109,15 +111,22 @@ limitations under the License.
         expect(element.$$('modal-icon')).to.exist;
         expect(element.$$('modal-icon').icon).to.equal('');
         expect(element.$$('modal-icon').iconStyleClass).to.equal('');
-        expect(element.$$('modal-icon').showIcon).to.be.true;
+        expect(element.$$('modal-icon').showIcon).to.be.false;
         expect(element.$$('modal-icon').open).to.be.false;
         expect(element.$$('modal-icon').openable).to.be.false;
       });
 
-      test('does have highlighted-text element', function() {
-        expect(element.$$('highlighted-text')).to.exist;
-        expect(element.$$('highlighted-text').tags).to.equal('em');
-        expect(element.$$('highlighted-text').text).to.equal('');
+      test('does have result text div element', function() {
+        expect(element.$$('div.result-text')).to.exist;
+        expect(element.$$('div.result-text').innerHTML).to.equal('Result');
+      });
+
+      test('does not have highlighted-text element', function() {
+        expect(element.$$('highlighted-text.result-text')).to.not.exist;
+      });
+
+      test('does not have iron-icon element', function() {
+        expect(element.$$('iron-icon')).to.not.exist;
       });
 
       test('does not have rank element', function() {
@@ -258,14 +267,24 @@ limitations under the License.
         expect(element._showImageElement).to.be.a('Function');
         expect(element._showImageElement()).to.equal('');
         expect(element._showImageElement([])).to.equal('show');
+        expect(element._showImageElement([], false)).to.equal('show');
+        expect(element._showImageElement([], true)).to.equal('');
         expect(element._showImageElement([{
           source: 'source1'
         }])).to.equal('show');
+        expect(element._showImageElement([{
+          source: 'source1'
+        }], true)).to.equal('');
         expect(element._showImageElement([{
           source: 'source1'
         }, {
           source: 'source2'
         }])).to.equal('show');
+        expect(element._showImageElement([{
+          source: 'source1'
+        }, {
+          source: 'source2'
+        }], true)).to.equal('');
       });
 
       test('toggleDetails does nothing if details, detailExtractions, and images are empty', function(done) {
@@ -298,6 +317,7 @@ limitations under the License.
         element.flag = 'myFlag';
         element.icon = 'myIcon';
         element.link = 'myLink';
+        element.name = 'myName';
         element.rank = 1.234;
         element.resultId = '1234';
         element.styleClass = 'myStyleClass';
@@ -376,6 +396,7 @@ limitations under the License.
         expect(element.flag).to.equal('myFlag');
         expect(element.icon).to.equal('myIcon');
         expect(element.link).to.equal('myLink');
+        expect(element.name).to.equal('myName');
         expect(element.rank).to.equal(1.234);
         expect(element.resultId).to.equal('1234');
         expect(element.styleClass).to.equal('myStyleClass');
@@ -467,17 +488,27 @@ limitations under the License.
 
       test('does have modal-icon element', function() {
         expect(element.$$('modal-icon')).to.exist;
-        expect(element.$$('modal-icon').icon).to.equal('myIcon');
-        expect(element.$$('modal-icon').iconStyleClass).to.equal('myStyleClass');
-        expect(element.$$('modal-icon').showIcon).to.be.true;
+        expect(element.$$('modal-icon').icon).to.equal('');
+        expect(element.$$('modal-icon').iconStyleClass).to.equal('');
+        expect(element.$$('modal-icon').showIcon).to.be.false;
         expect(element.$$('modal-icon').open).to.be.false;
         expect(element.$$('modal-icon').openable).to.be.true;
       });
 
+      test('does not have result text div element', function() {
+        expect(element.$$('div.result-text')).to.not.exist;
+      });
+
       test('does have highlighted-text element', function() {
-        expect(element.$$('highlighted-text')).to.exist;
-        expect(element.$$('highlighted-text').tags).to.equal('highlight');
-        expect(element.$$('highlighted-text').text).to.equal('myText');
+        expect(element.$$('highlighted-text.result-text')).to.exist;
+        expect(element.$$('highlighted-text.result-text').tags).to.equal('highlight');
+        expect(element.$$('highlighted-text.result-text').text).to.equal('myText');
+      });
+
+      test('does have iron-icon element', function() {
+        expect(element.$$('iron-icon')).to.exist;
+        expect(element.$$('iron-icon').icon).to.equal('myIcon');
+        expect(element.$$('iron-icon').classList.contains('myStyleClass')).to.be.true;
       });
 
       test('does have rank element', function() {
@@ -494,11 +525,12 @@ limitations under the License.
         expect(element.$$('a')).to.exist;
         expect(element.$$('a').href.indexOf('myLink') >= 0).to.be.true;
         expect(element.$$('a').target).to.equal('_blank');
-        expect(element.$$('a').title).to.equal('Open myType');
+        expect(element.$$('a').title).to.equal('Open This myName');
       });
 
       test('does have extraction-grid element', function() {
         expect(element.$$('extraction-grid')).to.exist;
+        expect(element.$$('extraction-grid').compressed).to.be.false;
         expect(element.$$('extraction-grid').extractions).to.deep.equal([{
           name: 'myHeaderExtraction1',
           data: [{
@@ -601,8 +633,6 @@ limitations under the License.
 
         flush(function() {
           expect(element.$$('detail-view')).to.exist;
-          expect(element.$$('detail-view').buttonLink).to.equal('myLink');
-          expect(element.$$('detail-view').buttonText).to.equal('Open myType');
           expect(element.$$('detail-view').detailHighlightedTextProperty).to.equal('highlightedText');
           expect(element.$$('detail-view').detailLinkProperty).to.equal('link');
           expect(element.$$('detail-view').detailNameProperty).to.equal('name');
