@@ -409,6 +409,7 @@ images = [{
               data-text-property="[[extractionDataTextProperty]]"
               data-type-property="[[extractionDataTypeProperty]]"
               data-width-property="[[extractionDataWidthProperty]]"
+              hide-confidences="[[hideConfidences]]"
               name-property="[[extractionNameProperty]]"
               result-id="[[resultId]]"
               result-type="[[type]]"
@@ -469,6 +470,7 @@ images = [{
               images="[[images]]"
               image-link-property="[[imageLinkProperty]]"
               image-source-property="[[imageSourceProperty]]"
+              hide-confidences="[[hideConfidences]]"
               result-id="[[resultId]]"
               result-type="[[type]]"
               show-provenances="{{showProvenances}}"
@@ -1032,6 +1034,19 @@ images = [{
         largeImageStyleClass: {
           type: String,
           value: ''
+        },
+
+        /**
+         * (Optional)
+         *
+         * Whether to hide the confidences.
+         *
+         * @type {Boolean}
+         * @default false
+         */
+        hideConfidences: {
+          type: Boolean,
+          value: false
         },
 
         /**
