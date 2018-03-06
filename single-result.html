@@ -370,7 +370,12 @@ images = [{
                   <iron-icon class$="[[styleClass]]" icon="[[icon]]"></iron-icon>
                 </template>
                 <template is="dom-if" if="[[_getResultHeaderText(text, highlightedText)]]">
-                  <highlighted-text class="result-text large-text" tags="[[highlightedTextTags]]" text="[[_getResultHeaderText(text, highlightedText)]]"></highlighted-text>
+                  <highlighted-text
+                    class="result-text large-text"
+                    newline-tag="[[newlineTag]]"
+                    tags="[[highlightedTextTags]]"
+                    text="[[_getResultHeaderText(text, highlightedText)]]">
+                  </highlighted-text>
                 </template>
                 <template is="dom-if" if="[[!_getResultHeaderText(text, highlightedText)]]">
                   <div class="result-text small-text">Open This [[name]]</div>
@@ -384,7 +389,12 @@ images = [{
                   <iron-icon class$="[[styleClass]]" icon="[[icon]]"></iron-icon>
                 </template>
                 <template is="dom-if" if="[[_getResultHeaderText(text, highlightedText)]]">
-                  <highlighted-text class="result-text large-text" tags="[[highlightedTextTags]]" text="[[_getResultHeaderText(text, highlightedText)]]"></highlighted-text>
+                  <highlighted-text
+                    class="result-text large-text"
+                    newline-tag="[[newlineTag]]"
+                    tags="[[highlightedTextTags]]"
+                    text="[[_getResultHeaderText(text, highlightedText)]]">
+                  </highlighted-text>
                 </template>
                 <template is="dom-if" if="[[!_getResultHeaderText(text, highlightedText)]]">
                   <div class="result-text small-text">[[name]]</div>
@@ -1073,6 +1083,17 @@ images = [{
         highlightedTextTags: {
           type: String,
           value: 'em'
+        },
+
+        /**
+         * (Optional)
+         *
+         * The newline tag (like '\n' or '<br/>').
+         *
+         * @type {String}
+         */
+        newlineTag: {
+          type: String
         },
 
         /**
