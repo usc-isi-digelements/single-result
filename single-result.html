@@ -92,6 +92,7 @@ images = [{
 
     <style>
       :host {
+        color: var(--paper-grey-900);
         display: block;
       }
 
@@ -111,7 +112,7 @@ images = [{
 
       .opened,
       .result:hover {
-        background-color: rgba(0,0,0,0.1);
+        background-color: rgba(0,0,0,0.05);
       }
 
       .preview-image {
@@ -176,11 +177,12 @@ images = [{
       }
 
       .result-link {
-        color: var(--primary-text-color);
+        color: var(--paper-grey-900);
+        padding: 0 5px;
       }
 
       .result-link:hover {
-        color: var(--secondary-text-color);
+        color: var(--paper-indigo-900);
       }
 
       .result-link highlighted-text {
@@ -204,7 +206,7 @@ images = [{
       }
 
       .cached-tab {
-        background-color: rgba(0,0,0,0.1);
+        background-color: rgba(0,0,0,0.05);
         height: 400px;
         padding: 5px;
       }
@@ -220,20 +222,15 @@ images = [{
       }
 
       paper-tab {
-        color: var(--secondary-text-color);
+        color: var(--paper-grey-900);
         font-size: 16px;
         font-weight: 500;
         padding: 0 15px;
       }
 
-      paper-tab:hover {
-        background-color: rgba(0,0,0,0.05);
-        color: var(--primary-text-color);
-      }
-
+      paper-tab:hover,
       paper-tab.iron-selected {
-        background-color: rgba(0,0,0,0.1);
-        color: var(--primary-text-color);
+        background-color: rgba(0,0,0,0.05);
       }
 
       paper-material {
@@ -451,12 +448,14 @@ images = [{
     <template is="dom-if" if="[[_doesHaveDetails(details, detailExtractions, images)]]">
       <iron-collapse id="details" opened="{{open}}">
         <template is="dom-if" if="[[open]]">
-          <paper-material>
-            <paper-tabs class="flex" no-bar no-ink selected="{{selectedTab}}">
-              <paper-tab class="flex-1">Details</paper-tab>
-              <paper-tab class="flex-1">Cached Page</paper-tab>
-            </paper-tabs>
-          </paper-material>
+          <template is="dom-if" if="[[!hideCachedPage]]">
+            <paper-material>
+              <paper-tabs class="flex" no-bar no-ink selected="{{selectedTab}}">
+                <paper-tab class="flex-1">Details</paper-tab>
+                <paper-tab class="flex-1">Cached Page</paper-tab>
+              </paper-tabs>
+            </paper-material>
+          </template>
           <template is="dom-if" if="[[_equals(0, selectedTab)]]">
             <detail-view
               tag-manager="[[tagManager]]"
@@ -488,8 +487,6 @@ images = [{
               show-provenances="{{showProvenances}}"
               small-image-style-class="[[smallImageStyleClass]]"
               large-image-style-class="[[largeImageStyleClass]]"
-              highlighted-text-tags="[[highlightedTextTags]]"
-              newline-tag="[[newlineTag]]"
               new-tab="[[newTab]]">
 
               <slot></slot>
@@ -649,11 +646,11 @@ images = [{
          *
          * The provenance data and result ID to show in the provenance dialog.  Contains {Number|String} confidence, {Array} data, and {Number|String} id.
          *
-         * @type {Object}
+         * @type {Array}
          */
         showProvenances: {
           notify: true,
-          type: Object
+          type: Array
         },
 
         /**
@@ -1048,6 +1045,19 @@ images = [{
         largeImageStyleClass: {
           type: String,
           value: ''
+        },
+
+        /**
+         * (Optional)
+         *
+         * Whether to hide the cached pages.
+         *
+         * @type {Boolean}
+         * @default false
+         */
+        hideCachedPage: {
+          type: Boolean,
+          value: false
         },
 
         /**

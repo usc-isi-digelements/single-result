@@ -1,7 +1,7 @@
 {
   "name": "single-result",
   "description": "A Polymer Element showing a single stylized result with details, extractions, images, and other optional information.",
-  "version": "2.4.9",
+  "version": "2.5.0",
   "authors": ["Next Century Corporation"],
   "license": "Apache-2.0",
   "keywords": [
@@ -16,9 +16,9 @@
   ],
   "dependencies": {
     "polymer": "Polymer/polymer#^2.0.2",
-    "detail-view": "DigElements/detail-view#2.2.12",
-    "extraction-grid": "DigElements/extraction-grid#2.2.10",
-    "highlighted-text": "DigElements/highlighted-text#2.2.0",
+    "detail-view": "DigElements/detail-view#2.3.0",
+    "extraction-grid": "DigElements/extraction-grid#2.3.0",
+    "highlighted-text": "DigElements/highlighted-text#2.2.1",
     "iron-collapse": "PolymerElements/iron-collapse#^2.0.0",
     "iron-flex-layout": "PolymerElements/iron-flex-layout#^2.0.0",
     "iron-icon": "PolymerElements/iron-icon#^2.0.0",
