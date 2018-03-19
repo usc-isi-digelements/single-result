@@ -110,9 +110,9 @@ images = [{
         box-shadow: none;
       }
 
-      .opened,
-      .result:hover {
-        background-color: rgba(0,0,0,0.05);
+      .closed:hover,
+      .opened {
+        background-color: var(--paper-grey-100);
       }
 
       .preview-image {
@@ -206,7 +206,7 @@ images = [{
       }
 
       .cached-tab {
-        background-color: rgba(0,0,0,0.05);
+        background-color: var(--paper-grey-300);
         height: 400px;
         padding: 5px;
       }
@@ -230,7 +230,7 @@ images = [{
 
       paper-tab:hover,
       paper-tab.iron-selected {
-        background-color: rgba(0,0,0,0.05);
+        background-color: var(--paper-grey-100);
       }
 
       paper-material {
