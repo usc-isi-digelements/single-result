@@ -99,6 +99,9 @@ images = [{
       .result {
         min-height: 50px;
         padding: 10px;
+        /* Fix box-shadow. */
+        position: relative;
+        z-index: 1;
       }
 
       .pointer {
@@ -206,7 +209,7 @@ images = [{
       }
 
       .cached-tab {
-        background-color: var(--paper-grey-300);
+        background-color: var(--paper-grey-100);
         height: 400px;
         padding: 5px;
       }
@@ -342,6 +345,7 @@ images = [{
     <template is="dom-if" if="[[!hideHeader]]">
       <paper-material
         class$="layout horizontal flex result [[_getResultHeaderStyleClass(details, detailExtractions, images, open)]]"
+        elevation="2"
         on-mouseover="_hoverStart"
         on-mouseout="_hoverEnd"
         on-tap="toggleDetails">
@@ -449,7 +453,7 @@ images = [{
       <iron-collapse id="details" opened="{{open}}">
         <template is="dom-if" if="[[open]]">
           <template is="dom-if" if="[[!hideCachedPage]]">
-            <paper-material>
+            <paper-material elevation="2">
               <paper-tabs class="flex" no-bar no-ink selected="{{selectedTab}}">
                 <paper-tab class="flex-1">Details</paper-tab>
                 <paper-tab class="flex-1">Cached Page</paper-tab>
