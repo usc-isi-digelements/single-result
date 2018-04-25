@@ -126,8 +126,8 @@ limitations under the License.
         expect(element.$$('highlighted-text.result-text')).to.not.exist;
       });
 
-      test('does not have iron-icon element', function() {
-        expect(element.$$('iron-icon')).to.not.exist;
+      test('does not have stylized-icon element', function() {
+        expect(element.$$('stylized-icon')).to.not.exist;
       });
 
       test('does not have rank element', function() {
@@ -506,10 +506,10 @@ limitations under the License.
         expect(element.$$('highlighted-text.result-text').text).to.equal('myText');
       });
 
-      test('does have iron-icon element', function() {
-        expect(element.$$('iron-icon')).to.exist;
-        expect(element.$$('iron-icon').icon).to.equal('myIcon');
-        expect(element.$$('iron-icon').classList.contains('myStyleClass')).to.be.true;
+      test('does have stylized-icon element', function() {
+        expect(element.$$('stylized-icon')).to.exist;
+        expect(element.$$('stylized-icon').icon).to.equal('myIcon');
+        expect(element.$$('stylized-icon').styleClass).to.equal('myStyleClass');
       });
 
       test('does have rank element', function() {
@@ -769,11 +769,11 @@ limitations under the License.
         expect(detailsElement.classList.contains('iron-collapse-opened')).to.be.false;
       });
 
-      test('toggleDetails does nothing if a paper-icon-button is clicked', function() {
+      test('toggleDetails does nothing if an icon-button is clicked', function() {
         var mockEvent = {
           target: {
             parentElement: {
-              localName: 'paper-icon-button'
+              localName: 'icon-button'
             }
           }
         };

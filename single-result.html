@@ -20,14 +20,13 @@ limitations under the License.
 <link rel="import" href="../highlighted-text/highlighted-text.html">
 <link rel="import" href="../iron-collapse/iron-collapse.html">
 <link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html">
-<link rel="import" href="../iron-icon/iron-icon.html">
-<link rel="import" href="../iron-icons/iron-icons.html">
 <link rel="import" href="../iron-image/iron-image.html">
 <link rel="import" href="../modal-icon/modal-icon.html">
 <link rel="import" href="../paper-material/paper-material.html">
 <link rel="import" href="../paper-styles/color.html">
 <link rel="import" href="../paper-tabs/paper-tabs.html">
 <link rel="import" href="../paper-tabs/paper-tab.html">
+<link rel="import" href="../stylized-icon/stylized-icon.html">
 <link rel="import" href="../tag-entity-buttons/tag-entity-buttons.html">
 
 <!--
@@ -106,6 +105,10 @@ images = [{
 
       .pointer {
         cursor: pointer;
+      }
+
+      .pointer:hover {
+        --modal-icon-color: var(--paper-grey-900);
       }
 
       .closed {
@@ -194,12 +197,6 @@ images = [{
         }
       }
 
-      modal-icon {
-        --paper-icon-button: {
-          padding: 5px;
-        };
-      }
-
       .hide {
         display: none;
       }
@@ -250,95 +247,8 @@ images = [{
         filter: blur(25px);
       }
 
-      iron-icon {
-        --iron-icon-height: 20px;
-        --iron-icon-width: 20px;
+      stylized-icon {
         margin-right: 10px;
-        min-width: 20px;
-      }
-
-      iron-icon.amber {
-        color: var(--paper-amber-600);
-      }
-
-      iron-icon.black {
-        color: #111;
-      }
-
-      iron-icon.blue {
-        color: var(--paper-blue-600);
-      }
-
-      iron-icon.blue-grey {
-        color: var(--paper-blue-grey-600);
-      }
-
-      iron-icon.brown {
-        color: var(--paper-brown-600);
-      }
-
-      iron-icon.cyan {
-        color: var(--paper-cyan-600);
-      }
-
-      iron-icon.deep-orange {
-        color: var(--paper-deep-orange-600);
-      }
-
-      iron-icon.deep-purple {
-        color: var(--paper-deep-purple-600);
-      }
-
-      iron-icon.green {
-        color: var(--paper-green-600);
-      }
-
-      iron-icon.grey {
-        color: var(--paper-grey-600);
-      }
-
-      iron-icon.indigo {
-        color: var(--paper-indigo-600);
-      }
-
-      iron-icon.light-blue {
-        color: var(--paper-light-blue-600);
-      }
-
-      iron-icon.light-green {
-        color: var(--paper-light-green-600);
-      }
-
-      iron-icon.lime {
-        color: var(--paper-lime-600);
-      }
-
-      iron-icon.orange {
-        color: var(--paper-orange-600);
-      }
-
-      iron-icon.pink {
-        color: var(--paper-pink-600);
-      }
-
-      iron-icon.purple {
-        color: var(--paper-purple-600);
-      }
-
-      iron-icon.red {
-        color: var(--paper-red-600);
-      }
-
-      iron-icon.teal {
-        color: var(--paper-teal-600);
-      }
-
-      iron-icon.white {
-        color: #fff;
-      }
-
-      iron-icon.yellow {
-        color: var(--paper-yellow-600);
       }
     </style>
 
@@ -370,7 +280,7 @@ images = [{
             <template is="dom-if" if="[[link]]">
               <a class="layout horizontal center result-link" href$="[[link]]" target="[[_getTarget(newTab)]]" title$="Open This [[name]]">
                 <template is="dom-if" if="[[icon]]">
-                  <iron-icon class$="[[styleClass]]" icon="[[icon]]"></iron-icon>
+                  <stylized-icon icon="[[icon]]" style-class="[[styleClass]]"></stylized-icon>
                 </template>
                 <template is="dom-if" if="[[_getResultHeaderText(text, highlightedText)]]">
                   <highlighted-text
@@ -389,7 +299,7 @@ images = [{
             <template is="dom-if" if="[[!link]]">
               <div class="layout horizontal center" title$="[[text]]">
                 <template is="dom-if" if="[[icon]]">
-                  <iron-icon class$="[[styleClass]]" icon="[[icon]]"></iron-icon>
+                  <stylized-icon icon="[[icon]]" style-class="[[styleClass]]"></stylized-icon>
                 </template>
                 <template is="dom-if" if="[[_getResultHeaderText(text, highlightedText)]]">
                   <highlighted-text
@@ -1304,7 +1214,7 @@ images = [{
       toggleDetails: function(event) {
         if(this._doesHaveDetails(this.details, this.detailExtractions, this.images)) {
           var isButton = (event.target.localName === 'paper-button');
-          var isButtonLink = (event.target.parentElement && event.target.parentElement.localName === 'paper-icon-button');
+          var isButtonLink = (event.target.parentElement && event.target.parentElement.localName === 'icon-button');
           var isLink = (event.target.localName === 'a' || (event.target.parentElement && event.target.parentElement.localName === 'a'));
           // Do not open the result if the user clicked on a button or link inside the result (including the annotation).
           if(!isButton && !isButtonLink && !isLink) {
