@@ -9,25 +9,25 @@
     "polymer"
   ],
   "main": "single-result.html",
-  "homepage": "https://github.com/DigElements/single-result/",
+  "homepage": "https://github.com/usc-isi-digelements/single-result/",
   "ignore": [
     "/.*",
     "/test/"
   ],
   "dependencies": {
     "polymer": "Polymer/polymer#^2.0.2",
-    "detail-view": "DigElements/detail-view#2.3.3",
-    "extraction-grid": "DigElements/extraction-grid#2.3.3",
-    "highlighted-text": "DigElements/highlighted-text#2.2.1",
+    "detail-view": "usc-isi-digelements/detail-view#2.3.3",
+    "extraction-grid": "usc-isi-digelements/extraction-grid#2.3.3",
+    "highlighted-text": "usc-isi-digelements/highlighted-text#2.2.1",
     "iron-collapse": "PolymerElements/iron-collapse#^2.0.0",
     "iron-flex-layout": "PolymerElements/iron-flex-layout#^2.0.0",
     "iron-image": "PolymerElements/iron-image#^2.0.0",
     "iron-pages": "PolymerElements/iron-pages#^2.0.0",
-    "modal-icon": "DigElements/modal-icon#2.1.0",
+    "modal-icon": "usc-isi-digelements/modal-icon#2.1.0",
     "paper-material": "PolymerElements/paper-material#^2.0.0",
     "paper-styles": "PolymerElements/paper-styles#^2.0.0",
     "paper-tabs": "PolymerElements/paper-tabs#^2.0.0",
-    "tag-entity-buttons": "DigElements/tag-entity-buttons#2.1.0"
+    "tag-entity-buttons": "usc-isi-digelements/tag-entity-buttons#2.1.0"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^2.0.0",
