@@ -355,17 +355,16 @@ images = [{
 
         <modal-icon
           data-t_detailextractions$="[[detailExtractions]]"
-          isopen$="false"
+          isopen$=""
           data-t_details$="[[details]]"
           data-t_images$="[[images]]"
-          openable="[[_doesHaveDetails(details, detailExtractions, images)]]"
-          open="[[open]]"
+          openable
+          open="{{open}}"
           on-click="toggleDetails">
         </modal-icon>
-
       </paper-material>
     </template>
-
+    <div>{{open}}</div>
     <template is="dom-if" if="[[_doesHaveDetails(details, detailExtractions, images)]]">
       <iron-collapse id="details" opened="{{open}}">
         <template is="dom-if" if="[[open]]">
@@ -1234,10 +1233,7 @@ images = [{
 
   /**
    * Expands or collapses the result details if its item has any details and the event was not triggered by clicking on a button.
-   * @param {Array} details
-   * @param {Array} detailExtractions
-   * @param {Array} images
-   * @param {Boolean} open
+   *
    * @event tap
    */
   toggleDetails(event) {
@@ -1256,7 +1252,7 @@ images = [{
           event.target.parentElement.localName === 'a');
       // Do not open the result if the user clicked on a button or link inside the result (including the annotation).
       if (!isButton && !isButtonLink && !isLink) {
-        console.log('1');
+        console.log('1', this);
         if (event.target.getAttribute('isopen') === 'true') {
           console.log('2');
           this.set('open', false);
