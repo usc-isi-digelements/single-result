@@ -258,16 +258,17 @@ images = [{
         elevation="2"
         on-mouseover="_hoverStart"
         on-mouseout="_hoverEnd"
-        on-tap="toggleDetails">
+        >
+        <template is="dom-if" if="[[rank]]">
+          <div class="layout vertical center">
 
-        <div class="layout vertical center">
-          <template is="dom-if" if="[[rank]]">
-            <div class="result-rank small-text" title$="Search Result Score:  [[rank]]">
-              [[rank]]
-            </div>
-          </template>
-          <iron-image class$="preview-image [[smallImageStyleClass]] hide [[_showImageElement(images, compressed)]]" src="[[_imageSrc]]"></iron-image>
-        </div>
+              <div class="result-rank small-text" title$="Search Result Score:  [[rank]]">
+                [[rank]]
+              </div>
+
+            <iron-image class$="preview-image [[smallImageStyleClass]] hide [[_showImageElement(images, compressed)]]" src="[[_imageSrc]]"></iron-image>
+          </div>
+        </template>
 
         <div class="layout vertical flex">
           <div class="layout horizontal center">
@@ -353,9 +354,15 @@ images = [{
         </template>
 
         <modal-icon
+          data-t_detailextractions$="[[detailExtractions]]"
+          isopen$="false"
+          data-t_details$="[[details]]"
+          data-t_images$="[[images]]"
           openable="[[_doesHaveDetails(details, detailExtractions, images)]]"
-          open="[[open]]">
+          open="[[open]]"
+          on-click="toggleDetails">
         </modal-icon>
+
       </paper-material>
     </template>
 
@@ -398,66 +405,23 @@ images = [{
 
                 <slot></slot>
               </detail-view>
-              <!-- <paper-tabs class="flex" no-bar no-ink selected="{{selectedTab}}">
-                <paper-tab class="flex-1">Details</paper-tab>
-                <paper-tab class="flex-1">Cached Page</paper-tab>
-              </paper-tabs> -->
             </paper-material>
           </template>
-          <!-- <template is="dom-if" if="[[_equals(0, selectedTab)]]">
-            <detail-view
-              tag-manager="[[tagManager]]"
-              details="[[details]]"
-              detail-highlighted-text-property="[[detailHighlightedTextProperty]]"
-              detail-link-property="[[detailLinkProperty]]"
-              detail-name-property="[[detailNameProperty]]"
-              detail-text-property="[[detailTextProperty]]"
-              extractions="[[detailExtractions]]"
-              extraction-data-property="[[extractionDataProperty]]"
-              extraction-data-classifications-property="[[extractionDataClassificationsProperty]]"
-              extraction-data-confidence-property="[[extractionDataConfidenceProperty]]"
-              extraction-data-highlight-property="[[extractionDataHighlightProperty]]"
-              extraction-data-icon-property="[[extractionDataIconProperty]]"
-              extraction-data-id-property="[[extractionDataIdProperty]]"
-              extraction-data-link-property="[[extractionDataLinkProperty]]"
-              extraction-data-provenances-property="[[extractionDataProvenancesProperty]]"
-              extraction-data-style-class-property="[[extractionDataStyleClassProperty]]"
-              extraction-data-text-property="[[extractionDataTextProperty]]"
-              extraction-data-type-property="[[extractionDataTypeProperty]]"
-              extraction-data-width-property="[[extractionDataWidthProperty]]"
-              extraction-name-property="[[extractionNameProperty]]"
-              images="[[images]]"
-              image-link-property="[[imageLinkProperty]]"
-              image-source-property="[[imageSourceProperty]]"
-              hide-confidences="[[hideConfidences]]"
-              result-id="[[resultId]]"
-              result-type="[[type]]"
-              show-provenances="{{showProvenances}}"
-              small-image-style-class="[[smallImageStyleClass]]"
-              large-image-style-class="[[largeImageStyleClass]]"
-              new-tab="[[newTab]]">
-
-              <slot></slot>
-            </detail-view>
-          </template>
-          <template is="dom-if" if="[[_equals(1, selectedTab)]]">
-            <div class="cached-tab">
-              <iframe class="cached-frame" sandbox="" srcdoc="[[cachedPage]]"></iframe>
-            </div>
-          </template> -->
         </template>
       </iron-collapse>
     </template>
   </template>
 
   <script>
-  (function() {
-  'use strict';
+  class SingleResult extends Polymer.Element {
+  // returns the name of the component
+  static get is() {
+    return 'single-result';
+  }
 
-  Polymer({
-    is: 'single-result',
-
-    properties: {
+  // defines the component's properties
+  static get properties() {
+    return {
       /**
        * (Optional)
        *
@@ -1076,10 +1040,12 @@ images = [{
        *
        * @type {Boolean}
        * @default false
-       * @private
+       *
        */
       open: {
         notify: true,
+        readOnly: false,
+        reflectToAttribute: true,
         type: Boolean,
         value: false
       },
@@ -1106,176 +1072,205 @@ images = [{
       _imageSrc: {
         type: String
       }
-    },
+    };
+  }
 
-    ready: function() {
-      // Load the image after the element is rendered.
-      Polymer.RenderStatus.afterNextRender(this, function() {
-        this.set(
-          '_imageSrc',
-          this._computeImageSrc(this.images, this.imageSourceProperty)
-        );
-      });
-    },
+  constructor() {
+    super();
+  }
 
-    /**
-     * Returns the src for the iron-imgae in the result header using the first image in the list of images.
-     *
-     * @param {Array} images
-     * @param {String} property
-     * @return {String}
-     * @private
-     */
-    _computeImageSrc: function(images, property) {
-      if (images && images.length && property) {
-        return images[0][property];
-      }
-      if (images) {
-        return undefined;
-      }
-      return '';
-    },
+  // ready() {
+  //   // Load the image after the element is rendered.
+  //   Polymer.RenderStatus.afterNextRender(this, function() {
+  //     this.set(
+  //       '_imageSrc',
+  //       this._computeImageSrc(this.images, this.imageSourceProperty)
+  //     );
+  //   });
+  // }
 
-    /**
-     * Returns whether the result has collapsible details to show.
-     *
-     * @param {Array} details
-     * @param {Array} detailExtractions
-     * @param {Array} images
-     * @return {Boolean}
-     * @private
-     */
-    _doesHaveDetails: function(details, detailExtractions, images) {
-      return !!(
+  /**
+   * Returns the src for the iron-imgae in the result header using the first image in the list of images.
+   *
+   * @param {Array} images
+   * @param {String} property
+   * @return {String}
+   * @private
+   */
+  _computeImageSrc(images, property) {
+    if (images && images.length && property) {
+      return images[0][property];
+    }
+    if (images) {
+      return undefined;
+    }
+    return '';
+  }
+
+  /**
+   * Returns whether the result has collapsible details to show.
+   *
+   * @param {Array} details
+   * @param {Array} detailExtractions
+   * @param {Array} images
+   * @return {Boolean}
+   * @private
+   */
+  _doesHaveDetails(details, detailExtractions, images) {
+    console.log(
+      'detail exist or not',
+      !!(
         (details && details.length) ||
         (detailExtractions && detailExtractions.length) ||
         (images && images.length)
-      );
-    },
+      )
+    );
+    return !!(
+      (details && details.length) ||
+      (detailExtractions && detailExtractions.length) ||
+      (images && images.length)
+    );
+  }
 
-    /**
-     * Returns whether the two arguments are equal.
-     *
-     * @param {Number} one
-     * @param {Number} two
-     * @return {Boolean}
-     * @private
-     */
-    _equals: function(one, two) {
-      return one === two;
-    },
+  /**
+   * Returns whether the two arguments are equal.
+   *
+   * @param {Number} one
+   * @param {Number} two
+   * @return {Boolean}
+   * @private
+   */
+  _equals(one, two) {
+    return one === two;
+  }
 
-    /**
-     * Returns the object in the given item at the given property.
-     *
-     * @param {Object} item
-     * @param {String} property
-     * @return {Object}
-     * @private
-     */
-    _getProperty: function(item, property) {
-      return item ? item[property] : undefined;
-    },
+  /**
+   * Returns the object in the given item at the given property.
+   *
+   * @param {Object} item
+   * @param {String} property
+   * @return {Object}
+   * @private
+   */
+  _getProperty(item, property) {
+    return item ? item[property] : undefined;
+  }
 
-    /**
-     * Returns the style class for the result header.
-     *
-     * @param {Array} details
-     * @param {Array} detailExtractions
-     * @param {Array} images
-     * @param {Boolean} open
-     * @return {String}
-     * @private
-     */
-    _getResultHeaderStyleClass: function(
-      details,
-      detailExtractions,
-      images,
-      open
-    ) {
-      var pointer = this._doesHaveDetails(details, detailExtractions, images);
-      return (open ? 'opened' : 'closed') + (pointer ? ' pointer' : '');
-    },
+  getOpen(open) {
+    console.log('get open', open ? true : false);
+    return open ? true : false;
+  }
 
-    /**
-     * Returns the text for the result header.
-     *
-     * @param {String} text
-     * @param {String} highlightedText
-     * @return {String}
-     * @private
-     */
-    _getResultHeaderText: function(text, highlightedText) {
-      return highlightedText || text;
-    },
+  /**
+   * Returns the style class for the result header.
+   *
+   * @param {Array} details
+   * @param {Array} detailExtractions
+   * @param {Array} images
+   * @param {Boolean} open
+   * @return {String}
+   * @private
+   */
+  _getResultHeaderStyleClass(details, detailExtractions, images, open) {
+    var pointer = this._doesHaveDetails(details, detailExtractions, images);
+    console.log('open', open);
+    return (open ? 'opened' : 'closed') + (pointer ? ' pointer' : '');
+  }
 
-    /**
-     * Returns the anchor and button target string.
-     *
-     * @param {Boolean} newTab
-     * @return {String}
-     * @private
-     */
-    _getTarget: function(newTab) {
-      return newTab ? '_blank' : '_self';
-    },
+  /**
+   * Returns the text for the result header.
+   *
+   * @param {String} text
+   * @param {String} highlightedText
+   * @return {String}
+   * @private
+   */
+  _getResultHeaderText(text, highlightedText) {
+    return highlightedText || text;
+  }
 
-    /**
-     * Ends hovering behavior.
-     *
-     * @event mouseout
-     * @private
-     */
-    _hoverEnd: function() {
-      this._hovering = false;
-    },
+  /**
+   * Returns the anchor and button target string.
+   *
+   * @param {Boolean} newTab
+   * @return {String}
+   * @private
+   */
+  _getTarget(newTab) {
+    return newTab ? '_blank' : '_self';
+  }
 
-    /**
-     * Starts hovering behavior.
-     *
-     * @event mouseover
-     * @private
-     */
-    _hoverStart: function() {
-      this._hovering = true;
-    },
+  /**
+   * Ends hovering behavior.
+   *
+   * @event mouseout
+   * @private
+   */
+  _hoverEnd() {
+    this._hovering = false;
+  }
 
-    /**
-     * Returns whether or not to show the iron-image element in the result header based on whether the list of images is set.
-     *
-     * @param {Array} images
-     * @param {Boolean} compressed
-     * @return {String}
-     * @private
-     */
-    _showImageElement: function(images, compressed) {
-      return images && !compressed ? 'show' : '';
-    },
+  /**
+   * Starts hovering behavior.
+   *
+   * @event mouseover
+   * @private
+   */
+  _hoverStart() {
+    this._hovering = true;
+  }
 
-    /**
-     * Expands or collapses the result details if its item has any details and the event was not triggered by clicking on a button.
-     *
-     * @event tap
-     */
-    toggleDetails: function(event) {
-      if (
-        this._doesHaveDetails(this.details, this.detailExtractions, this.images)
-      ) {
-        var isButton = event.target.localName === 'paper-button';
-        var isButtonLink =
-          event.target.parentElement &&
-          event.target.parentElement.localName === 'icon-button';
-        var isLink =
-          event.target.localName === 'a' ||
-          (event.target.parentElement &&
-            event.target.parentElement.localName === 'a');
-        // Do not open the result if the user clicked on a button or link inside the result (including the annotation).
-        if (!isButton && !isButtonLink && !isLink) {
-          this.set('open', !this.open);
+  /**
+   * Returns whether or not to show the iron-image element in the result header based on whether the list of images is set.
+   *
+   * @param {Array} images
+   * @param {Boolean} compressed
+   * @return {String}
+   * @private
+   */
+  _showImageElement(images, compressed) {
+    return images && !compressed ? 'show' : '';
+  }
+
+  /**
+   * Expands or collapses the result details if its item has any details and the event was not triggered by clicking on a button.
+   * @param {Array} details
+   * @param {Array} detailExtractions
+   * @param {Array} images
+   * @param {Boolean} open
+   * @event tap
+   */
+  toggleDetails(event) {
+    var t_details = event.target.dataset.t_detailextractions;
+    var t_images = event.target.dataset.t_images;
+    var t_detailextractions = event.target.dataset.t_detailextractions;
+
+    if (this._doesHaveDetails(t_details, t_detailextractions, t_images)) {
+      var isButton = event.target.localName === 'paper-button';
+      var isButtonLink =
+        event.target.parentElement &&
+        event.target.parentElement.localName === 'icon-button';
+      var isLink =
+        event.target.localName === 'a' ||
+        (event.target.parentElement &&
+          event.target.parentElement.localName === 'a');
+      // Do not open the result if the user clicked on a button or link inside the result (including the annotation).
+      if (!isButton && !isButtonLink && !isLink) {
+        console.log('1');
+        if (event.target.getAttribute('isopen') === 'true') {
+          console.log('2');
+          this.set('open', false);
+          event.target.setAttribute('isopen', 'false');
+        } else {
+          console.log('3');
+          event.target.setAttribute('isopen', 'true');
+          this.set('open', true);
         }
       }
     }
-  });
-})();
+  }
+}
+
+customElements.define(SingleResult.is, SingleResult);
 </script>
 </dom-module>

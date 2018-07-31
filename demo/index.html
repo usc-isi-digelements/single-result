@@ -25,82 +25,106 @@ limitations under the License.
 <body unresolved>
   <dom-bind id="demo">
     <script>
-      (function(document) {
-        var demo = document.querySelector('dom-bind');
+    (function(document) {
+  var demo = document.querySelector('dom-bind');
 
-        demo.cachedPage = '<h1>Header</h1><p>The cached page text</p>';
+  demo.cachedPage = '<h1>Header</h1><p>The cached page text</p>';
 
-        demo.headerExtractions = [{
-          name: 'Header Extraction #1',
-          data: [{
-            confidence: 100,
-            highlight: true,
-            icon: 'star',
-            link: 'https://nextcentury.com',
-            text: 'Next Century'
-          }, {
-            confidence: 50,
-            icon: 'favorite',
-            link: 'https://github.com/DigElements',
-            text: 'DigElements'
-          }]
-        }, {
-          name: 'Header Extraction #2',
-          data: [{
-            icon: 'error',
-            text: 'Example Extraction'
-          }]
-        }];
-
-        demo.details = [{
-          name: 'Detail #1',
-          text: 'This is unhighlighted text.'
-        }, {
-          name: 'Detail #2',
-          highlightedText: 'This is <em>highlighted</em> text.'
-        }];
-
-        demo.detailExtractions = [{
-          name: 'Detail Extraction #1',
-          data: [{
-            icon: 'link',
-            link: 'https://github.com/usc-isi-digelements/single-result',
-            text: 'Single Result'
-          }]
-        }, {
-          name: 'Detail Extraction #2',
-          data: [{
-            icon: 'menu',
-            link: 'https://github.com/usc-isi-digelements/detail-view',
-            text: 'Detail View'
-          }, {
-            icon: 'apps',
-            link: 'https://github.com/usc-isi-digelements/extraction-grid',
-            text: 'Extraction Grid'
-          }, {
-            icon: 'text-format',
-            link: 'https://github.com/usc-isi-digelements/highlighted-text',
-            text: 'Highlighted Text'
-          }, {
-            icon: 'face',
-            link: 'https://github.com/usc-isi-digelements/modal-icon',
-            text: 'Modal Icon'
-          }]
-        }];
-
-        demo.images = [{
-          link: 'https://github.com/DigElements',
-          source: 'dig.png'
-        }, {
+  demo.headerExtractions = [
+    {
+      name: 'Header Extraction #1',
+      data: [
+        {
+          confidence: 100,
+          highlight: true,
+          icon: 'star',
           link: 'https://nextcentury.com',
-          source: 'NextCentury.png'
-        }];
+          text: 'Next Century'
+        },
+        {
+          confidence: 50,
+          icon: 'favorite',
+          link: 'https://github.com/DigElements',
+          text: 'DigElements'
+        }
+      ]
+    },
+    {
+      name: 'Header Extraction #2',
+      data: [
+        {
+          icon: 'error',
+          text: 'Example Extraction'
+        }
+      ]
+    }
+  ];
 
-        demo.stringify = function(object) {
-          return JSON.stringify(object);
-        };
-      })(document);
-    </script>
+  demo.details = [
+    {
+      name: 'Detail #1',
+      text: 'This is unhighlighted text.'
+    },
+    {
+      name: 'Detail #2',
+      highlightedText: 'This is <em>highlighted</em> text.'
+    }
+  ];
+
+  demo.detailExtractions = [
+    {
+      name: 'Detail Extraction #1',
+      data: [
+        {
+          icon: 'link',
+          link: 'https://github.com/usc-isi-digelements/single-result',
+          text: 'Single Result'
+        }
+      ]
+    },
+    {
+      name: 'Detail Extraction #2',
+      data: [
+        {
+          icon: 'menu',
+          link: 'https://github.com/usc-isi-digelements/detail-view',
+          text: 'Detail View'
+        },
+        {
+          icon: 'apps',
+          link: 'https://github.com/usc-isi-digelements/extraction-grid',
+          text: 'Extraction Grid'
+        },
+        {
+          icon: 'text-format',
+          link: 'https://github.com/usc-isi-digelements/highlighted-text',
+          text: 'Highlighted Text'
+        },
+        {
+          icon: 'face',
+          link: 'https://github.com/usc-isi-digelements/modal-icon',
+          text: 'Modal Icon'
+        }
+      ]
+    }
+  ];
+
+  demo.images = [
+    {
+      link: 'https://github.com/DigElements',
+      source: 'dig.png'
+    },
+    {
+      link: 'https://nextcentury.com',
+      source: 'NextCentury.png'
+    }
+  ];
+
+  demo.stringify = function(object) {
+    return JSON.stringify(object);
+  };
+})(document);
+</script>
 
     <template is="dom-bind">
       <p>Flag: Important</p>
@@ -122,8 +146,8 @@ limitations under the License.
         highlighted-text="The <em>highlighted</em> result text."
         icon="assignment"
         link="https://nextcentury.com"
-        rank="0.99"
-        type="Sample"
+        rank="0.5"
+        type="Webpage"
         header-extractions="[[headerExtractions]]"
         details="[[details]]"
         detail-extractions="[[detailExtractions]]"
