@@ -1160,7 +1160,6 @@ images = [{
   }
 
   getOpen(open) {
-    console.log('get open', open ? true : false);
     return open ? true : false;
   }
 
@@ -1241,8 +1240,6 @@ images = [{
    * @event click
    */
   toggleDetails(event) {
-    console.log(event);
-    console.log(event.target.dataset);
     var t_details = event.target.dataset.details;
     var t_images = event.target.dataset.images;
     var t_detailextractions = event.target.dataset.detailextractions;
@@ -1257,15 +1254,11 @@ images = [{
         (event.target.parentElement &&
           event.target.parentElement.localName === 'a');
       // Do not open the result if the user clicked on a button or link inside the result (including the annotation).
-      console.log(event.path[0].tagName);
-      console.log(isButton, isButtonLink, isLink);
       if (!isButton && !isButtonLink && !isLink) {
         if (event.target.getAttribute('isopen') === 'true') {
-          console.log('2');
           this.set('open', false);
           event.target.setAttribute('isopen', 'false');
         } else {
-          console.log('3');
           event.target.setAttribute('isopen', 'true');
           this.set('open', true);
         }
