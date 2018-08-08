@@ -258,6 +258,8 @@ images = [{
         elevation="2"
         on-mouseover="_hoverStart"
         on-mouseout="_hoverEnd"
+        isopen$=""
+        on-tap="toggleDetails"
         >
         <template is="dom-if" if="[[rank]]">
           <div class="layout vertical center">
@@ -321,6 +323,9 @@ images = [{
             <extraction-grid
               compressed="[[compressed]]"
               extractions="[[headerExtractions]]"
+              data-details$="[[details]]"
+              data-images$="[[images]]"
+              data-detailextractions$="[[detailExtractions]]"
               data-property="[[extractionDataProperty]]"
               data-classifications-property="[[extractionDataClassificationsProperty]]"
               data-confidence-property="[[extractionDataConfidenceProperty]]"
@@ -339,7 +344,8 @@ images = [{
               result-type="[[type]]"
               show-provenances="{{showProvenances}}"
               tag-manager="[[tagManager]]"
-              target="[[_getTarget(newTab)]]">
+              target="[[_getTarget(newTab)]]"
+              >
             </extraction-grid>
           </template>
         </div>
@@ -354,17 +360,15 @@ images = [{
         </template>
 
         <modal-icon
-          data-t_detailextractions$="[[detailExtractions]]"
-          isopen$=""
-          data-t_details$="[[details]]"
-          data-t_images$="[[images]]"
+          data-details$="[[details]]"
+          data-images$="[[images]]"
+          data-detailextractions$="[[detailExtractions]]"
           openable
           open="{{open}}"
-          on-click="toggleDetails">
         </modal-icon>
       </paper-material>
     </template>
-    
+
     <template is="dom-if" if="[[_doesHaveDetails(details, detailExtractions, images)]]">
       <iron-collapse id="details" opened="{{open}}">
         <template is="dom-if" if="[[open]]">
@@ -1234,25 +1238,28 @@ images = [{
   /**
    * Expands or collapses the result details if its item has any details and the event was not triggered by clicking on a button.
    *
-   * @event tap
+   * @event click
    */
   toggleDetails(event) {
-    var t_details = event.target.dataset.t_detailextractions;
-    var t_images = event.target.dataset.t_images;
-    var t_detailextractions = event.target.dataset.t_detailextractions;
-
+    console.log(event);
+    console.log(event.target.dataset);
+    var t_details = event.target.dataset.details;
+    var t_images = event.target.dataset.images;
+    var t_detailextractions = event.target.dataset.detailextractions;
+    // console.log(t_details, t_images, t_detailextractions);
     if (this._doesHaveDetails(t_details, t_detailextractions, t_images)) {
       var isButton = event.target.localName === 'paper-button';
       var isButtonLink =
         event.target.parentElement &&
         event.target.parentElement.localName === 'icon-button';
       var isLink =
-        event.target.localName === 'a' ||
+        event.path[0].tagName === 'A' ||
         (event.target.parentElement &&
           event.target.parentElement.localName === 'a');
       // Do not open the result if the user clicked on a button or link inside the result (including the annotation).
+      console.log(event.path[0].tagName);
+      console.log(isButton, isButtonLink, isLink);
       if (!isButton && !isButtonLink && !isLink) {
-        console.log('1', this);
         if (event.target.getAttribute('isopen') === 'true') {
           console.log('2');
           this.set('open', false);
