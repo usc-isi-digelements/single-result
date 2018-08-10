@@ -111,14 +111,19 @@ images = [{
         --modal-icon-color: var(--paper-grey-900);
       }
 
+
       .closed {
-        /* Override default paper-material box-shadow. */
+        /* set margin left and right to 1.5em */
+        margin-left: 1.5em;
+        margin-right: 1.5em;
         box-shadow: none;
       }
 
       .closed:hover,
       .opened {
-        background-color: var(--paper-grey-100);
+        margin-left: 0em;
+        margin-right: 0em;
+        background-color: var(--paper-grey-300);
       }
 
       .preview-image {
@@ -255,7 +260,6 @@ images = [{
     <template is="dom-if" if="[[!hideHeader]]">
       <paper-material
         class$="layout horizontal flex result [[_getResultHeaderStyleClass(details, detailExtractions, images, open)]]"
-        elevation="2"
         on-mouseover="_hoverStart"
         on-mouseout="_hoverEnd"
         isopen$=""
@@ -359,13 +363,13 @@ images = [{
           </tag-entity-buttons>
         </template>
 
-        <modal-icon
+        <!-- <modal-icon
           data-details$="[[details]]"
           data-images$="[[images]]"
           data-detailextractions$="[[detailExtractions]]"
           openable
           open="{{open}}"
-        </modal-icon>
+        </modal-icon> -->
       </paper-material>
     </template>
 
@@ -373,7 +377,7 @@ images = [{
       <iron-collapse id="details" opened="{{open}}">
         <template is="dom-if" if="[[open]]">
           <template is="dom-if" if="[[!hideCachedPage]]">
-            <paper-material elevation="2">
+            <paper-material>
               <detail-view
                 tag-manager="[[tagManager]]"
                 details="[[details]]"
