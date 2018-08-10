@@ -96,11 +96,21 @@ images = [{
       }
 
       .result {
-        min-height: 50px;
+        /* min-height: 50px; */
         padding: 10px;
         /* Fix box-shadow. */
         position: relative;
-        z-index: 1;
+        /* z-index: 1; */
+      }
+
+      .sg-opened {
+        margin-top: 2em;
+        margin-bottom: 2em;
+      }
+
+      .sg-closed {
+        margin-top: 0em;
+        margin-bottom: 0em
       }
 
       .pointer {
@@ -111,6 +121,9 @@ images = [{
         --modal-icon-color: var(--paper-grey-900);
       }
 
+      .detail-container {
+        background-color: white;
+      }
 
       .closed {
         /* set margin left and right to 1.5em */
@@ -123,15 +136,14 @@ images = [{
         box-shadow: none;
       }
 
-      .closed:hover,
+      /* .closed:hover, */
       .opened {
         border-bottom-style: solid;
-        border-bottom-width: 1px;
+        border-bottom-width: 0px;
         border-bottom-color: var(--paper-grey-300);
         background-color: white;
         margin-left: 0em;
         margin-right: 0em;
-        background-color: var(--paper-grey-300);
         box-shadow: none;
       }
 
@@ -261,171 +273,186 @@ images = [{
         filter: blur(25px);
       }
 
+      .hr {
+        border-style: solid;
+        border-color: lightgray;
+        width: 100%;
+        margin-top: 8;
+        border-bottom-width: 1px;
+        border-top-width: 0px
+      }
+
       stylized-icon {
         margin-right: 10px;
       }
     </style>
+    <div id="single-result-container" class$="[[_getSingleResultStyleClass(open)]]" >
+      <template is="dom-if" if="[[!hideHeader]]">
+        <paper-material
+          class$="layout horizontal flex result [[_getResultHeaderStyleClass(details, detailExtractions, images, open)]]"
+          on-mouseover="_hoverStart"
+          on-mouseout="_hoverEnd"
+          isopen$=""
+          on-click="toggleDetails"
+          >
+          <template is="dom-if" if="[[rank]]">
+            <div class="layout vertical center">
 
-    <template is="dom-if" if="[[!hideHeader]]">
-      <paper-material
-        class$="layout horizontal flex result [[_getResultHeaderStyleClass(details, detailExtractions, images, open)]]"
-        on-mouseover="_hoverStart"
-        on-mouseout="_hoverEnd"
-        isopen$=""
-        on-tap="toggleDetails"
-        >
-        <template is="dom-if" if="[[rank]]">
-          <div class="layout vertical center">
+                <div class="result-rank small-text" title$="Search Result Score:  [[rank]]">
+                  [[rank]]
+                </div>
 
-              <div class="result-rank small-text" title$="Search Result Score:  [[rank]]">
-                [[rank]]
-              </div>
-
-            <iron-image class$="preview-image [[smallImageStyleClass]] hide [[_showImageElement(images, compressed)]]" src="[[_imageSrc]]"></iron-image>
-          </div>
-        </template>
-
-        <div class="layout vertical flex">
-          <div class="layout horizontal center">
-            <template is="dom-if" if="[[flag]]">
-              <div class="result-flag small-text">
-                [[flag]]
-              </div>
-            </template>
-
-            <template is="dom-if" if="[[link]]">
-              <a class="layout horizontal center result-link" href$="[[link]]" target="[[_getTarget(newTab)]]" title$="Open This [[name]]">
-                <template is="dom-if" if="[[icon]]">
-                  <stylized-icon icon="[[icon]]" style-class="[[styleClass]]"></stylized-icon>
-                </template>
-                <template is="dom-if" if="[[_getResultHeaderText(text, highlightedText)]]">
-                  <highlighted-text
-                    class="result-text large-text"
-                    newline-tag="[[newlineTag]]"
-                    tags="[[highlightedTextTags]]"
-                    text="[[_getResultHeaderText(text, highlightedText)]]">
-                  </highlighted-text>
-                </template>
-                <template is="dom-if" if="[[!_getResultHeaderText(text, highlightedText)]]">
-                  <div class="result-text small-text">Open This [[name]]</div>
-                </template>
-              </a>
-            </template>
-
-            <template is="dom-if" if="[[!link]]">
-              <div class="layout horizontal center" title$="[[text]]">
-                <template is="dom-if" if="[[icon]]">
-                  <stylized-icon icon="[[icon]]" style-class="[[styleClass]]"></stylized-icon>
-                </template>
-                <template is="dom-if" if="[[_getResultHeaderText(text, highlightedText)]]">
-                  <highlighted-text
-                    class="result-text large-text"
-                    newline-tag="[[newlineTag]]"
-                    tags="[[highlightedTextTags]]"
-                    text="[[_getResultHeaderText(text, highlightedText)]]">
-                  </highlighted-text>
-                </template>
-                <template is="dom-if" if="[[!_getResultHeaderText(text, highlightedText)]]">
-                  <div class="result-text small-text">[[name]]</div>
-                </template>
-              </div>
-            </template>
-          </div>
-
-          <template is="dom-if" if="[[headerExtractions.length]]">
-            <extraction-grid
-              compressed="[[compressed]]"
-              extractions="[[headerExtractions]]"
-              data-details$="[[details]]"
-              data-images$="[[images]]"
-              data-detailextractions$="[[detailExtractions]]"
-              data-property="[[extractionDataProperty]]"
-              data-classifications-property="[[extractionDataClassificationsProperty]]"
-              data-confidence-property="[[extractionDataConfidenceProperty]]"
-              data-highlight-property="[[extractionDataHighlightProperty]]"
-              data-icon-property="[[extractionDataIconProperty]]"
-              data-id-property="[[extractionDataIdProperty]]"
-              data-link-property="[[extractionDataLinkProperty]]"
-              data-provenances-property="[[extractionDataProvenancesProperty]]"
-              data-style-class-property="[[extractionDataStyleClassProperty]]"
-              data-text-property="[[extractionDataTextProperty]]"
-              data-type-property="[[extractionDataTypeProperty]]"
-              data-width-property="[[extractionDataWidthProperty]]"
-              hide-confidences="[[hideConfidences]]"
-              name-property="[[extractionNameProperty]]"
-              result-id="[[resultId]]"
-              result-type="[[type]]"
-              show-provenances="{{showProvenances}}"
-              tag-manager="[[tagManager]]"
-              target="[[_getTarget(newTab)]]"
-              >
-            </extraction-grid>
+              <iron-image class$="preview-image [[smallImageStyleClass]] hide [[_showImageElement(images, compressed)]]" src="[[_imageSrc]]"></iron-image>
+            </div>
           </template>
-        </div>
 
-        <template is="dom-if" if="[[tagManager]]">
-          <tag-entity-buttons class="self-center"
-            entity-id="[[resultId]]"
-            entity-type="[[type]]"
-            tag-manager="[[tagManager]]"
-            tags="{{tags}}">
-          </tag-entity-buttons>
-        </template>
+          <div class="layout vertical flex">
+            <div class="layout horizontal center">
+              <template is="dom-if" if="[[flag]]">
+                <div class="result-flag small-text">
+                  [[flag]]
+                </div>
+              </template>
 
-        <!-- <modal-icon
-          data-details$="[[details]]"
-          data-images$="[[images]]"
-          data-detailextractions$="[[detailExtractions]]"
-          openable
-          open="{{open}}"
-        </modal-icon> -->
-      </paper-material>
-    </template>
+              <template is="dom-if" if="[[link]]">
+                <a class="layout horizontal center result-link" href$="[[link]]" target="[[_getTarget(newTab)]]" title$="Open This [[name]]">
+                  <template is="dom-if" if="[[icon]]">
+                    <stylized-icon icon="[[icon]]" style-class="[[styleClass]]"></stylized-icon>
+                  </template>
+                  <template is="dom-if" if="[[_getResultHeaderText(text, highlightedText)]]">
+                    <highlighted-text
+                      class="result-text large-text"
+                      newline-tag="[[newlineTag]]"
+                      tags="[[highlightedTextTags]]"
+                      text="[[_getResultHeaderText(text, highlightedText)]]">
+                    </highlighted-text>
+                  </template>
+                  <template is="dom-if" if="[[!_getResultHeaderText(text, highlightedText)]]">
+                    <div class="result-text small-text">Open This [[name]]</div>
+                  </template>
+                </a>
+              </template>
 
-    <template is="dom-if" if="[[_doesHaveDetails(details, detailExtractions, images)]]">
-      <iron-collapse id="details" opened="{{open}}">
-        <template is="dom-if" if="[[open]]">
-          <template is="dom-if" if="[[!hideCachedPage]]">
-            <paper-material>
-              <detail-view
-                tag-manager="[[tagManager]]"
-                details="[[details]]"
-                detail-highlighted-text-property="[[detailHighlightedTextProperty]]"
-                detail-link-property="[[detailLinkProperty]]"
-                detail-name-property="[[detailNameProperty]]"
-                detail-text-property="[[detailTextProperty]]"
-                extractions="[[detailExtractions]]"
-                extraction-data-property="[[extractionDataProperty]]"
-                extraction-data-classifications-property="[[extractionDataClassificationsProperty]]"
-                extraction-data-confidence-property="[[extractionDataConfidenceProperty]]"
-                extraction-data-highlight-property="[[extractionDataHighlightProperty]]"
-                extraction-data-icon-property="[[extractionDataIconProperty]]"
-                extraction-data-id-property="[[extractionDataIdProperty]]"
-                extraction-data-link-property="[[extractionDataLinkProperty]]"
-                extraction-data-provenances-property="[[extractionDataProvenancesProperty]]"
-                extraction-data-style-class-property="[[extractionDataStyleClassProperty]]"
-                extraction-data-text-property="[[extractionDataTextProperty]]"
-                extraction-data-type-property="[[extractionDataTypeProperty]]"
-                extraction-data-width-property="[[extractionDataWidthProperty]]"
-                extraction-name-property="[[extractionNameProperty]]"
-                images="[[images]]"
-                image-link-property="[[imageLinkProperty]]"
-                image-source-property="[[imageSourceProperty]]"
+              <template is="dom-if" if="[[!link]]">
+                <div class="layout horizontal center" title$="[[text]]">
+                  <template is="dom-if" if="[[icon]]">
+                    <stylized-icon icon="[[icon]]" style-class="[[styleClass]]"></stylized-icon>
+                  </template>
+                  <template is="dom-if" if="[[_getResultHeaderText(text, highlightedText)]]">
+                    <highlighted-text
+                      class="result-text large-text"
+                      newline-tag="[[newlineTag]]"
+                      tags="[[highlightedTextTags]]"
+                      text="[[_getResultHeaderText(text, highlightedText)]]">
+                    </highlighted-text>
+                  </template>
+                  <template is="dom-if" if="[[!_getResultHeaderText(text, highlightedText)]]">
+                    <div class="result-text small-text">[[name]]</div>
+                  </template>
+                </div>
+              </template>
+
+              <a>rs data</a>
+              <a>cachedPage</a>
+            </div>
+
+            <template is="dom-if" if="[[headerExtractions.length]]">
+              <!-- data-details$="[[details]]"
+              data-images$="[[images]]"
+              data-detailextractions$="[[detailExtractions]]" -->
+              <hr class="hr">
+              <extraction-grid
+                compressed="[[compressed]]"
+                extractions="[[headerExtractions]]"
+                data-property="[[extractionDataProperty]]"
+                data-classifications-property="[[extractionDataClassificationsProperty]]"
+                data-confidence-property="[[extractionDataConfidenceProperty]]"
+                data-highlight-property="[[extractionDataHighlightProperty]]"
+                data-icon-property="[[extractionDataIconProperty]]"
+                data-id-property="[[extractionDataIdProperty]]"
+                data-link-property="[[extractionDataLinkProperty]]"
+                data-provenances-property="[[extractionDataProvenancesProperty]]"
+                data-style-class-property="[[extractionDataStyleClassProperty]]"
+                data-text-property="[[extractionDataTextProperty]]"
+                data-type-property="[[extractionDataTypeProperty]]"
+                data-width-property="[[extractionDataWidthProperty]]"
                 hide-confidences="[[hideConfidences]]"
+                name-property="[[extractionNameProperty]]"
                 result-id="[[resultId]]"
                 result-type="[[type]]"
                 show-provenances="{{showProvenances}}"
-                small-image-style-class="[[smallImageStyleClass]]"
-                large-image-style-class="[[largeImageStyleClass]]"
-                new-tab="[[newTab]]">
+                tag-manager="[[tagManager]]"
+                target="[[_getTarget(newTab)]]"
+                >
+              </extraction-grid>
+            </template>
+          </div>
 
-                <slot></slot>
-              </detail-view>
-            </paper-material>
+          <template is="dom-if" if="[[tagManager]]">
+            <tag-entity-buttons class="self-center"
+              entity-id="[[resultId]]"
+              entity-type="[[type]]"
+              tag-manager="[[tagManager]]"
+              tags="{{tags}}">
+            </tag-entity-buttons>
           </template>
-        </template>
-      </iron-collapse>
-    </template>
+
+          <!-- <modal-icon
+            data-details$="[[details]]"
+            data-images$="[[images]]"
+            data-detailextractions$="[[detailExtractions]]"
+            openable
+            open="{{open}}"
+          </modal-icon> -->
+        </paper-material>
+      </template>
+
+      <template is="dom-if" if="[[_doesHaveDetails(details, detailExtractions, images)]]">
+        <iron-collapse id="details" opened="{{open}}">
+          <template is="dom-if" if="[[open]]">
+            <template is="dom-if" if="[[!hideCachedPage]]">
+              <paper-material class="detail-container" elevation="0">
+                <detail-view
+                  tag-manager="[[tagManager]]"
+                  details="[[details]]"
+                  detail-highlighted-text-property="[[detailHighlightedTextProperty]]"
+                  detail-link-property="[[detailLinkProperty]]"
+                  detail-name-property="[[detailNameProperty]]"
+                  detail-text-property="[[detailTextProperty]]"
+                  header-extractions="[[headerExtractions]]"
+                  extractions="[[detailExtractions]]"
+                  extraction-data-property="[[extractionDataProperty]]"
+                  extraction-data-classifications-property="[[extractionDataClassificationsProperty]]"
+                  extraction-data-confidence-property="[[extractionDataConfidenceProperty]]"
+                  extraction-data-highlight-property="[[extractionDataHighlightProperty]]"
+                  extraction-data-icon-property="[[extractionDataIconProperty]]"
+                  extraction-data-id-property="[[extractionDataIdProperty]]"
+                  extraction-data-link-property="[[extractionDataLinkProperty]]"
+                  extraction-data-provenances-property="[[extractionDataProvenancesProperty]]"
+                  extraction-data-style-class-property="[[extractionDataStyleClassProperty]]"
+                  extraction-data-text-property="[[extractionDataTextProperty]]"
+                  extraction-data-type-property="[[extractionDataTypeProperty]]"
+                  extraction-data-width-property="[[extractionDataWidthProperty]]"
+                  extraction-name-property="[[extractionNameProperty]]"
+                  images="[[images]]"
+                  image-link-property="[[imageLinkProperty]]"
+                  image-source-property="[[imageSourceProperty]]"
+                  hide-confidences="[[hideConfidences]]"
+                  result-id="[[resultId]]"
+                  result-type="[[type]]"
+                  show-provenances="{{showProvenances}}"
+                  small-image-style-class="[[smallImageStyleClass]]"
+                  large-image-style-class="[[largeImageStyleClass]]"
+                  new-tab="[[newTab]]">
+
+                  <slot></slot>
+                </detail-view>
+              </paper-material>
+            </template>
+          </template>
+        </iron-collapse>
+      </template>
+    </div>
   </template>
 
   <script>
@@ -1172,10 +1199,6 @@ images = [{
     return item ? item[property] : undefined;
   }
 
-  getOpen(open) {
-    return open ? true : false;
-  }
-
   /**
    * Returns the style class for the result header.
    *
@@ -1190,6 +1213,17 @@ images = [{
     var pointer = this._doesHaveDetails(details, detailExtractions, images);
     console.log('open', open);
     return (open ? 'opened' : 'closed') + (pointer ? ' pointer' : '');
+  }
+
+  /**
+   * Returns the style class for the single result.
+   *
+   * @param {Boolean} open
+   * @return {String}
+   * @private
+   */
+  _getSingleResultStyleClass(open) {
+    return open ? 'sg-opened' : 'sg-closed';
   }
 
   /**
@@ -1253,30 +1287,31 @@ images = [{
    * @event click
    */
   toggleDetails(event) {
-    var t_details = event.target.dataset.details;
-    var t_images = event.target.dataset.images;
-    var t_detailextractions = event.target.dataset.detailextractions;
-    // console.log(t_details, t_images, t_detailextractions);
-    if (this._doesHaveDetails(t_details, t_detailextractions, t_images)) {
-      var isButton = event.target.localName === 'paper-button';
-      var isButtonLink =
-        event.target.parentElement &&
-        event.target.parentElement.localName === 'icon-button';
-      var isLink =
-        event.path[0].tagName === 'A' ||
-        (event.target.parentElement &&
-          event.target.parentElement.localName === 'a');
-      // Do not open the result if the user clicked on a button or link inside the result (including the annotation).
-      if (!isButton && !isButtonLink && !isLink) {
-        if (event.target.getAttribute('isopen') === 'true') {
-          this.set('open', false);
-          event.target.setAttribute('isopen', 'false');
-        } else {
-          event.target.setAttribute('isopen', 'true');
-          this.set('open', true);
-        }
+    // console.log(event.target.dataset);
+    // var t_details = event.target.dataset.details;
+    // var t_images = event.target.dataset.images;
+    // var t_detailextractions = event.target.dataset.detailextractions;
+    // // console.log(t_details, t_images, t_detailextractions);
+    // if (this._doesHaveDetails(t_details, t_detailextractions, t_images)) {
+    var isButton = event.target.localName === 'paper-button';
+    var isButtonLink =
+      event.target.parentElement &&
+      event.target.parentElement.localName === 'icon-button';
+    var isLink =
+      event.path[0].tagName === 'A' ||
+      (event.target.parentElement &&
+        event.target.parentElement.localName === 'a');
+    // Do not open the result if the user clicked on a button or link inside the result (including the annotation).
+    if (!isButton && !isButtonLink && !isLink) {
+      if (event.target.getAttribute('isopen') === 'true') {
+        this.set('open', false);
+        event.target.setAttribute('isopen', 'false');
+      } else {
+        event.target.setAttribute('isopen', 'true');
+        this.set('open', true);
       }
     }
+    // }
   }
 }
 
