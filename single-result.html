@@ -145,6 +145,7 @@ images = [{
         margin-left: 0em;
         margin-right: 0em;
         box-shadow: none;
+        padding-bottom: 0px;
       }
 
       .preview-image {
@@ -285,11 +286,22 @@ images = [{
       stylized-icon {
         margin-right: 10px;
       }
+
+      .rawdata-link {
+        @apply --layout-horizontal;
+        @apply --layout-end-justified;
+      }
+
+      detail-view {
+        margin-left: 10px;
+      }
+
     </style>
     <div id="single-result-container" class$="[[_getSingleResultStyleClass(open)]]" >
       <template is="dom-if" if="[[!hideHeader]]">
         <paper-material
           class$="layout horizontal flex result [[_getResultHeaderStyleClass(details, detailExtractions, images, open)]]"
+          elevation="0"
           on-mouseover="_hoverStart"
           on-mouseout="_hoverEnd"
           isopen$=""
@@ -315,26 +327,28 @@ images = [{
               </template>
 
               <template is="dom-if" if="[[link]]">
-                <a class="layout horizontal center result-link" href$="[[link]]" target="[[_getTarget(newTab)]]" title$="Open This [[name]]">
-                  <template is="dom-if" if="[[icon]]">
-                    <stylized-icon icon="[[icon]]" style-class="[[styleClass]]"></stylized-icon>
-                  </template>
-                  <template is="dom-if" if="[[_getResultHeaderText(text, highlightedText)]]">
-                    <highlighted-text
-                      class="result-text large-text"
-                      newline-tag="[[newlineTag]]"
-                      tags="[[highlightedTextTags]]"
-                      text="[[_getResultHeaderText(text, highlightedText)]]">
-                    </highlighted-text>
-                  </template>
-                  <template is="dom-if" if="[[!_getResultHeaderText(text, highlightedText)]]">
-                    <div class="result-text small-text">Open This [[name]]</div>
-                  </template>
-                </a>
+                <div class="layout flex horizontal center">
+                  <a class="layout horizontal center result-link" href$="[[link]]" target="[[_getTarget(newTab)]]" title$="Open This [[name]]">
+                    <template is="dom-if" if="[[icon]]">
+                      <stylized-icon icon="[[icon]]" style-class="[[styleClass]]"></stylized-icon>
+                    </template>
+                    <template is="dom-if" if="[[_getResultHeaderText(text, highlightedText)]]">
+                      <highlighted-text
+                        class="result-text large-text"
+                        newline-tag="[[newlineTag]]"
+                        tags="[[highlightedTextTags]]"
+                        text="[[_getResultHeaderText(text, highlightedText)]]">
+                      </highlighted-text>
+                    </template>
+                    <template is="dom-if" if="[[!_getResultHeaderText(text, highlightedText)]]">
+                      <div class="result-text small-text">Open This [[name]]</div>
+                    </template>
+                  </a>
+                </div>
               </template>
 
               <template is="dom-if" if="[[!link]]">
-                <div class="layout horizontal center" title$="[[text]]">
+                <div class="layout flex horizontal center" title$="[[text]]">
                   <template is="dom-if" if="[[icon]]">
                     <stylized-icon icon="[[icon]]" style-class="[[styleClass]]"></stylized-icon>
                   </template>
@@ -352,14 +366,24 @@ images = [{
                 </div>
               </template>
 
-              <a>rs data</a>
-              <a>cachedPage</a>
+              <template is="dom-if" if="true">
+                <a class="layout horizontal center" href$="[[_getRawData(details)]]" target="[[_getTarget(newTab)]]" title="Open This Raw Data">
+                  <template is="dom-if" if="[[icon]]">
+                    <stylized-icon icon="inbox" style-class="[[styleClass]]"></stylized-icon>
+                  </template>
+                </a>
+              </template>
+
+              <template is="dom-if" if="true">
+                <a class="layout horizontal center" href$="[[_getCachedPage(details)]]" target="[[_getTarget(newTab)]]" title="Open This Cached Page">
+                  <template is="dom-if" if="[[icon]]">
+                    <stylized-icon icon="link" style-class="[[styleClass]]"></stylized-icon>
+                  </template>
+                </a>
+              </template>
             </div>
 
             <template is="dom-if" if="[[headerExtractions.length]]">
-              <!-- data-details$="[[details]]"
-              data-images$="[[images]]"
-              data-detailextractions$="[[detailExtractions]]" -->
               <hr class="hr">
               <extraction-grid
                 compressed="[[compressed]]"
@@ -397,13 +421,6 @@ images = [{
             </tag-entity-buttons>
           </template>
 
-          <!-- <modal-icon
-            data-details$="[[details]]"
-            data-images$="[[images]]"
-            data-detailextractions$="[[detailExtractions]]"
-            openable
-            open="{{open}}"
-          </modal-icon> -->
         </paper-material>
       </template>
 
@@ -444,7 +461,6 @@ images = [{
                   small-image-style-class="[[smallImageStyleClass]]"
                   large-image-style-class="[[largeImageStyleClass]]"
                   new-tab="[[newTab]]">
-
                   <slot></slot>
                 </detail-view>
               </paper-material>
@@ -1250,6 +1266,38 @@ images = [{
   }
 
   /**
+   * Returns the raw data url of this single result.
+   *
+   * @param {Array} details
+   * @return {String}
+   * @private
+   */
+  _getRawData(details) {
+    var i = details.length;
+    while (i--) {
+      if (details[i]['name'] === 'Raw ES Data') {
+        return details[i]['link'];
+      }
+    }
+  }
+
+  /**
+   * Returns the cached page url of this single result.
+   *
+   * @param {Array} details
+   * @return {String}
+   * @private
+   */
+  _getCachedPage(details) {
+    var i = details.length;
+    while (i--) {
+      if (details[i]['name'] === 'Cached Page') {
+        return details[i]['link'];
+      }
+    }
+  }
+
+  /**
    * Ends hovering behavior.
    *
    * @event mouseout
@@ -1287,12 +1335,6 @@ images = [{
    * @event click
    */
   toggleDetails(event) {
-    // console.log(event.target.dataset);
-    // var t_details = event.target.dataset.details;
-    // var t_images = event.target.dataset.images;
-    // var t_detailextractions = event.target.dataset.detailextractions;
-    // // console.log(t_details, t_images, t_detailextractions);
-    // if (this._doesHaveDetails(t_details, t_detailextractions, t_images)) {
     var isButton = event.target.localName === 'paper-button';
     var isButtonLink =
       event.target.parentElement &&

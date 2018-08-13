@@ -2,7 +2,7 @@
   "name": "single-result",
   "description":
     "A Polymer Element showing a single stylized result with details, extractions, images, and other optional information.",
-  "version": "2.5.4",
+  "version": "2.5.8",
   "authors": ["Next Century Corporation"],
   "license": "Apache-2.0",
   "keywords": ["web-component", "polymer"],
@@ -11,7 +11,7 @@
   "ignore": ["/.*", "/test/"],
   "dependencies": {
     "polymer": "Polymer/polymer#^2.0.2",
-    "detail-view": "usc-isi-digelements/detail-view#^2.3.3",
+    "detail-view": "usc-isi-digelements/detail-view#^2.3.4",
     "extraction-grid": "usc-isi-digelements/extraction-grid#^2.3.4",
     "highlighted-text": "usc-isi-digelements/highlighted-text#^2.2.1",
     "iron-collapse": "PolymerElements/iron-collapse#^2.0.0",
