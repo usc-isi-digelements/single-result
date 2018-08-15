@@ -454,7 +454,7 @@ images = [{
             on-mouseover="_hoverStart"
             on-mouseout="_hoverEnd"
             isopen$=""
-            on-click="toggleDetails"
+            on-tap="toggleDetails"
             >
             <template is="dom-if" if="[[rank]]">
               <div class="layout vertical center">
@@ -1491,14 +1491,18 @@ images = [{
   /**
    * Expands or collapses the result details if its item has any details and the event was not triggered by clicking on a button.
    *
-   * @event click
+   * @event tap
    */
   toggleDetails(event) {
     console.log('sr', event);
-    var isButton = event.target.localName === 'paper-button';
+    var isButton =
+      event.path[0].tagName === 'iron-icon' ||
+      event.path[0].tagName === 'paper-icon-button' ||
+      event.target.localName === 'paper-button';
     var isButtonLink =
-      event.target.parentElement &&
-      event.target.parentElement.localName === 'icon-button';
+      event.path[0].tagName === 'icon-button' ||
+      (event.target.parentElement &&
+        event.target.parentElement.localName === 'icon-button');
     var isLink =
       event.path[0].tagName === 'A' ||
       (event.target.parentElement &&
