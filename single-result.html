@@ -297,8 +297,157 @@ images = [{
       }
 
     </style>
-    <div id="single-result-container" class$="[[_getSingleResultStyleClass(open)]]" >
-      <template is="dom-if" if="[[!hideHeader]]">
+
+    <template is="dom-if" if=[[nestedObject]]>
+      <div id="single-nestedObject-container">
+        <paper-material
+          class$="layout horizontal flex result pointer"
+          elevation="0"
+          on-mouseover="_hoverStart"
+          on-mouseout="_hoverEnd"
+          >
+
+          <div class="layout vertical flex">
+            <div class="layout horizontal center">
+              <template is="dom-if" if="[[link]]">
+                <div class="layout flex horizontal center">
+                  <a
+                    class="layout horizontal center result-link"
+                    href$="[[link]]"
+                    target="[[_getTarget(newTab)]]"
+                    title$="Open This [[name]]"
+                  >
+                    <template is="dom-if" if="[[icon]]">
+                      <stylized-icon
+                        icon="[[icon]]"
+                        style-class="[[styleClass]]"
+                      >
+                      </stylized-icon>
+                    </template>
+                    <template is="dom-if" if="[[_getResultHeaderText(text, highlightedText)]]">
+                      <highlighted-text
+                        class="result-text large-text"
+                        newline-tag="[[newlineTag]]"
+                        tags="[[highlightedTextTags]]"
+                        text="[[_getResultHeaderText(text, highlightedText)]]">
+                      </highlighted-text>
+                    </template>
+                    <template is="dom-if" if="[[!_getResultHeaderText(text, highlightedText)]]">
+                      <div class="result-text small-text">Open This [[name]]</div>
+                    </template>
+                  </a>
+                </div>
+              </template>
+
+              <template is="dom-if" if="[[!link]]">
+                <div class="layout flex horizontal center" title$="[[text]]">
+                  <template is="dom-if" if="[[icon]]">
+                    <stylized-icon icon="[[icon]]" style-class="[[styleClass]]"></stylized-icon>
+                  </template>
+                  <template is="dom-if" if="[[_getResultHeaderText(text, highlightedText)]]">
+                    <highlighted-text
+                      class="result-text large-text"
+                      newline-tag="[[newlineTag]]"
+                      tags="[[highlightedTextTags]]"
+                      text="[[_getResultHeaderText(text, highlightedText)]]">
+                    </highlighted-text>
+                  </template>
+                  <template is="dom-if" if="[[!_getResultHeaderText(text, highlightedText)]]">
+                    <div class="result-text small-text">[[name]]</div>
+                  </template>
+                </div>
+              </template>
+
+              <template is="dom-if" if="[[_getRawData(details)]]">
+                <a class="layout horizontal center" href$="[[_getRawData(details)]]" target="[[_getTarget(newTab)]]" title="Open This Raw Data">
+                  <stylized-icon icon="inbox" style-class="[[styleClass]]"></stylized-icon>
+                </a>
+              </template>
+
+              <template is="dom-if" if="[[_getCachedPage(details)]]">
+                <a class="layout horizontal center" href$="[[_getCachedPage(details)]]" target="[[_getTarget(newTab)]]" title="Open This Cached Page">
+                  <stylized-icon icon="link" style-class="[[styleClass]]"></stylized-icon>
+                </a>
+              </template>
+            </div>
+
+            <template is="dom-if" if="[[headerExtractions.length]]">
+              <hr class="hr">
+              <extraction-grid
+                compressed="[[compressed]]"
+                extractions="[[headerExtractions]]"
+                data-property="[[extractionDataProperty]]"
+                data-classifications-property="[[extractionDataClassificationsProperty]]"
+                data-confidence-property="[[extractionDataConfidenceProperty]]"
+                data-highlight-property="[[extractionDataHighlightProperty]]"
+                data-icon-property="[[extractionDataIconProperty]]"
+                data-id-property="[[extractionDataIdProperty]]"
+                data-link-property="[[extractionDataLinkProperty]]"
+                data-provenances-property="[[extractionDataProvenancesProperty]]"
+                data-style-class-property="[[extractionDataStyleClassProperty]]"
+                data-text-property="[[extractionDataTextProperty]]"
+                data-type-property="[[extractionDataTypeProperty]]"
+                data-width-property="[[extractionDataWidthProperty]]"
+                hide-confidences="[[hideConfidences]]"
+                name-property="[[extractionNameProperty]]"
+                result-id="[[resultId]]"
+                result-type="[[type]]"
+                show-provenances="{{showProvenances}}"
+                tag-manager="[[tagManager]]"
+                target="[[_getTarget(newTab)]]"
+                >
+              </extraction-grid>
+            </template>
+
+            <template is="dom-if" if="[[_doesHaveDetails(details, detailExtractions, images)]]">
+              <template is="dom-if" if="[[!hideCachedPage]]">
+                <paper-material class="detail-container" elevation="0">
+                  <detail-view
+                    tag-manager="[[tagManager]]"
+                    details="[[details]]"
+                    detail-highlighted-text-property="[[detailHighlightedTextProperty]]"
+                    detail-link-property="[[detailLinkProperty]]"
+                    detail-name-property="[[detailNameProperty]]"
+                    detail-text-property="[[detailTextProperty]]"
+                    header-extractions="[[headerExtractions]]"
+                    extractions="[[detailExtractions]]"
+                    extraction-data-property="[[extractionDataProperty]]"
+                    extraction-data-classifications-property="[[extractionDataClassificationsProperty]]"
+                    extraction-data-confidence-property="[[extractionDataConfidenceProperty]]"
+                    extraction-data-highlight-property="[[extractionDataHighlightProperty]]"
+                    extraction-data-icon-property="[[extractionDataIconProperty]]"
+                    extraction-data-id-property="[[extractionDataIdProperty]]"
+                    extraction-data-link-property="[[extractionDataLinkProperty]]"
+                    extraction-data-provenances-property="[[extractionDataProvenancesProperty]]"
+                    extraction-data-style-class-property="[[extractionDataStyleClassProperty]]"
+                    extraction-data-text-property="[[extractionDataTextProperty]]"
+                    extraction-data-type-property="[[extractionDataTypeProperty]]"
+                    extraction-data-width-property="[[extractionDataWidthProperty]]"
+                    extraction-name-property="[[extractionNameProperty]]"
+                    images="[[images]]"
+                    image-link-property="[[imageLinkProperty]]"
+                    image-source-property="[[imageSourceProperty]]"
+                    hide-confidences="[[hideConfidences]]"
+                    result-id="[[resultId]]"
+                    result-type="[[type]]"
+                    show-provenances="{{showProvenances}}"
+                    small-image-style-class="[[smallImageStyleClass]]"
+                    large-image-style-class="[[largeImageStyleClass]]"
+                    new-tab="[[newTab]]">
+                    <slot></slot>
+                  </detail-view>
+                </paper-material>
+              </template>
+            </template>
+
+          </div>
+        </paper-material>
+      </div>
+    </template>
+
+    <template is="dom-if" if=[[!nestedObject]]>
+      <div id="single-result-container" class$="[[_getSingleResultStyleClass(open)]]" >
+        <template is="dom-if" if="[[!hideHeader]]">
         <paper-material
           class$="layout horizontal flex result [[_getResultHeaderStyleClass(details, detailExtractions, images, open)]]"
           elevation="0"
@@ -420,11 +569,10 @@ images = [{
               tags="{{tags}}">
             </tag-entity-buttons>
           </template>
-
         </paper-material>
-      </template>
+        </template>
 
-      <template is="dom-if" if="[[_doesHaveDetails(details, detailExtractions, images)]]">
+        <template is="dom-if" if="[[_doesHaveDetails(details, detailExtractions, images)]]">
         <iron-collapse id="details" opened="{{open}}">
           <template is="dom-if" if="[[open]]">
             <template is="dom-if" if="[[!hideCachedPage]]">
@@ -467,8 +615,9 @@ images = [{
             </template>
           </template>
         </iron-collapse>
-      </template>
-    </div>
+        </template>
+      </div>
+    </template>
   </template>
 
   <script>
@@ -1335,6 +1484,7 @@ images = [{
    * @event click
    */
   toggleDetails(event) {
+    console.log('sr', event);
     var isButton = event.target.localName === 'paper-button';
     var isButtonLink =
       event.target.parentElement &&
