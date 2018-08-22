@@ -113,6 +113,22 @@ images = [{
         margin-bottom: 0em
       }
 
+      .hr-opened {
+        border-style: solid;
+        border-color: lightgray;
+        width: 100%;
+        margin-top: 8px;
+        border-bottom-width: 1px;
+        border-top-width: 0px
+      }
+
+      .hr-closed {
+        margin-top: 3px;
+        margin-bottom: 0px;
+        border-top-width: 0px;
+        border-bottom-width: 0px;
+      }
+
       .pointer {
         cursor: pointer;
       }
@@ -129,7 +145,7 @@ images = [{
         /* set margin left and right to 1.5em */
         border-bottom-style: solid;
         border-bottom-width: 1px;
-        border-bottom-color: var(--paper-grey-300);
+        border-bottom-color: var(--paper-grey-600);
         background-color: white;
         margin-left: 1.5em;
         margin-right: 1.5em;
@@ -139,8 +155,8 @@ images = [{
       /* .closed:hover, */
       .opened {
         border-bottom-style: solid;
-        border-bottom-width: 0px;
-        border-bottom-color: var(--paper-grey-300);
+        border-bottom-width: 1px;
+        border-bottom-color: var(--paper-grey-600);
         background-color: white;
         margin-left: 0em;
         margin-right: 0em;
@@ -274,15 +290,6 @@ images = [{
         filter: blur(25px);
       }
 
-      .hr {
-        border-style: solid;
-        border-color: lightgray;
-        width: 100%;
-        margin-top: 8;
-        border-bottom-width: 1px;
-        border-top-width: 0px
-      }
-
       stylized-icon {
         margin-right: 10px;
       }
@@ -296,7 +303,7 @@ images = [{
       }
 
       detail-view {
-        margin-left: 10px;
+        /* margin-left: 10px; */
       }
 
     </style>
@@ -515,25 +522,21 @@ images = [{
                   </div>
                 </template>
 
-                <template is="dom-if" if="true">
+                <template is="dom-if" if="[[_getRawData(details)]]">
                   <a class="layout horizontal center" href$="[[_getRawData(details)]]" target="[[_getTarget(newTab)]]" title="Open This Raw Data">
-                    <template is="dom-if" if="[[icon]]">
-                      <stylized-icon icon="inbox" style-class="[[styleClass]]"></stylized-icon>
-                    </template>
+                    <stylized-icon icon="inbox" style-class="[[styleClass]]"></stylized-icon>
                   </a>
                 </template>
 
-                <template is="dom-if" if="true">
+                <template is="dom-if" if="[[_getCachedPage(details)]]">
                   <a class="layout horizontal center" href$="[[_getCachedPage(details)]]" target="[[_getTarget(newTab)]]" title="Open This Cached Page">
-                    <template is="dom-if" if="[[icon]]">
-                      <stylized-icon icon="link" style-class="[[styleClass]]"></stylized-icon>
-                    </template>
+                    <stylized-icon icon="link" style-class="[[styleClass]]"></stylized-icon>
                   </a>
                 </template>
               </div>
 
               <template is="dom-if" if="[[headerExtractions.length]]">
-                <hr class="hr">
+                <hr class$="[[_getHrStyleClass(open)]]">
                 <extraction-grid
                   compressed="[[compressed]]"
                   extractions="[[headerExtractions]]"
@@ -558,6 +561,48 @@ images = [{
                   target="[[_getTarget(newTab)]]"
                   >
                 </extraction-grid>
+                <template is="dom-if" if="[[_doesHaveDetails(details, detailExtractions, images)]]">
+                  <iron-collapse id="details" opened="{{open}}">
+                    <template is="dom-if" if="[[open]]">
+                      <template is="dom-if" if="[[!hideCachedPage]]">
+                        <detail-view
+                          tag-manager="[[tagManager]]"
+                          details="[[details]]"
+                          detail-highlighted-text-property="[[detailHighlightedTextProperty]]"
+                          detail-link-property="[[detailLinkProperty]]"
+                          detail-name-property="[[detailNameProperty]]"
+                          detail-text-property="[[detailTextProperty]]"
+                          header-extractions="[[headerExtractions]]"
+                          extractions="[[detailExtractions]]"
+                          extraction-data-property="[[extractionDataProperty]]"
+                          extraction-data-classifications-property="[[extractionDataClassificationsProperty]]"
+                          extraction-data-confidence-property="[[extractionDataConfidenceProperty]]"
+                          extraction-data-highlight-property="[[extractionDataHighlightProperty]]"
+                          extraction-data-icon-property="[[extractionDataIconProperty]]"
+                          extraction-data-id-property="[[extractionDataIdProperty]]"
+                          extraction-data-link-property="[[extractionDataLinkProperty]]"
+                          extraction-data-provenances-property="[[extractionDataProvenancesProperty]]"
+                          extraction-data-style-class-property="[[extractionDataStyleClassProperty]]"
+                          extraction-data-text-property="[[extractionDataTextProperty]]"
+                          extraction-data-type-property="[[extractionDataTypeProperty]]"
+                          extraction-data-width-property="[[extractionDataWidthProperty]]"
+                          extraction-name-property="[[extractionNameProperty]]"
+                          images="[[images]]"
+                          image-link-property="[[imageLinkProperty]]"
+                          image-source-property="[[imageSourceProperty]]"
+                          hide-confidences="[[hideConfidences]]"
+                          result-id="[[resultId]]"
+                          result-type="[[type]]"
+                          show-provenances="{{showProvenances}}"
+                          small-image-style-class="[[smallImageStyleClass]]"
+                          large-image-style-class="[[largeImageStyleClass]]"
+                          new-tab="[[newTab]]">
+                          <slot></slot>
+                        </detail-view>
+                      </template>
+                    </template>
+                  </iron-collapse>
+                </template>
               </template>
             </div>
 
@@ -572,7 +617,7 @@ images = [{
           </paper-material>
         </template>
 
-        <template is="dom-if" if="[[_doesHaveDetails(details, detailExtractions, images)]]">
+        <!-- <template is="dom-if" if="[[_doesHaveDetails(details, detailExtractions, images)]]">
           <iron-collapse id="details" opened="{{open}}">
             <template is="dom-if" if="[[open]]">
               <template is="dom-if" if="[[!hideCachedPage]]">
@@ -613,7 +658,7 @@ images = [{
               </template>
             </template>
           </iron-collapse>
-        </template>
+        </template> -->
       </div>
     </template>
   </template>
@@ -765,10 +810,15 @@ images = [{
        * The provenance data and result ID to show in the provenance dialog.  Contains {Number|String} confidence, {Array} data, and {Number|String} id.
        *
        * @type {Array}
+       * @default []
        */
       showProvenances: {
         notify: true,
-        type: Array
+        type: Array,
+        value: function() {
+          return [];
+        }
+        // observer: '_printValue'
       },
 
       /**
@@ -1335,14 +1385,6 @@ images = [{
    * @private
    */
   _doesHaveDetails(details, detailExtractions, images) {
-    console.log(
-      'detail exist or not',
-      !!(
-        (details && details.length) ||
-        (detailExtractions && detailExtractions.length) ||
-        (images && images.length)
-      )
-    );
     return !!(
       (details && details.length) ||
       (detailExtractions && detailExtractions.length) ||
@@ -1360,6 +1402,10 @@ images = [{
    */
   _equals(one, two) {
     return one === two;
+  }
+
+  _printValue(newValue, oldValue) {
+    console.log('single res showPro', newValue, oldValue);
   }
 
   /**
@@ -1399,6 +1445,17 @@ images = [{
    */
   _getSingleResultStyleClass(open) {
     return open ? 'sg-opened' : 'sg-closed';
+  }
+
+  /**
+   * Returns the style class for the hr.
+   *
+   * @param {Boolean} open
+   * @return {String}
+   * @private
+   */
+  _getHrStyleClass(open) {
+    return open ? 'hr-opened' : 'hr-closed';
   }
 
   /**
@@ -1494,7 +1551,8 @@ images = [{
    * @event tap
    */
   toggleDetails(event) {
-    console.log('sr', event);
+    // console.log('sr', event);
+    // console.log('sr', event.target.localName);
     var isButton =
       event.path[0].tagName === 'iron-icon' ||
       event.path[0].tagName === 'paper-icon-button' ||
@@ -1507,8 +1565,9 @@ images = [{
       event.path[0].tagName === 'A' ||
       (event.target.parentElement &&
         event.target.parentElement.localName === 'a');
+    var isNestedObj = event.target.localName === 'nested-list';
     // Do not open the result if the user clicked on a button or link inside the result (including the annotation).
-    if (!isButton && !isButtonLink && !isLink) {
+    if (!isButton && !isButtonLink && !isLink && !isNestedObj) {
       if (event.target.getAttribute('isopen') === 'true') {
         this.set('open', false);
         event.target.setAttribute('isopen', 'false');
@@ -1517,7 +1576,6 @@ images = [{
         this.set('open', true);
       }
     }
-    // }
   }
 }
 
