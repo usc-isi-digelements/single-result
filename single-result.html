@@ -1552,21 +1552,21 @@ images = [{
    */
   toggleDetails(event) {
     // console.log('sr event', event, event.target);
-    // var isButton =
-    //   event.path[0].tagName === 'iron-icon' ||
-    //   event.path[0].tagName === 'paper-icon-button' ||
-    //   event.target.localName === 'paper-button';
-    // var isButtonLink =
-    //   event.path[0].tagName === 'icon-button' ||
-    //   (event.target.parentElement &&
-    //     event.target.parentElement.localName === 'icon-button');
-    // var isLink =
-    //   event.path[0].tagName === 'A' ||
-    //   (event.target.parentElement &&
-    //     event.target.parentElement.localName === 'a');
+    var isButton =
+      event.target.localName === 'paper-button' ||
+      event.path[0].tagName === 'paper-icon-button' ||
+      event.path[0].tagName === 'iron-icon';
+    var isButtonLink =
+      (event.target.parentElement &&
+        event.target.parentElement.localName === 'icon-button') ||
+      event.path[0].tagName === 'icon-button';
+    var isLink =
+      (event.target.parentElement &&
+        event.target.parentElement.localName === 'a') ||
+      event.path[0].tagName === 'A';
     var isNestedObj = event.target.localName === 'nested-list';
     // Do not open the result if the user clicked on a button or link inside the result (including the annotation).
-    if (!isNestedObj) {
+    if (!isButton && !isButtonLink && !isLink && !isNestedObj) {
       this.set('open', !this.open);
       // if (event.target.getAttribute('isopen') === 'true') {
       //   this.set('open', false);
