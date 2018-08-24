@@ -461,7 +461,7 @@ images = [{
             on-mouseover="_hoverStart"
             on-mouseout="_hoverEnd"
             isopen$=""
-            on-tap="toggleDetails"
+            on-click="toggleDetails"
             >
             <template is="dom-if" if="[[rank]]">
               <div class="layout vertical center">
@@ -1548,33 +1548,33 @@ images = [{
   /**
    * Expands or collapses the result details if its item has any details and the event was not triggered by clicking on a button.
    *
-   * @event tap
+   * @event click
    */
   toggleDetails(event) {
-    // console.log('sr', event);
-    // console.log('sr', event.target.localName);
-    var isButton =
-      event.path[0].tagName === 'iron-icon' ||
-      event.path[0].tagName === 'paper-icon-button' ||
-      event.target.localName === 'paper-button';
-    var isButtonLink =
-      event.path[0].tagName === 'icon-button' ||
-      (event.target.parentElement &&
-        event.target.parentElement.localName === 'icon-button');
-    var isLink =
-      event.path[0].tagName === 'A' ||
-      (event.target.parentElement &&
-        event.target.parentElement.localName === 'a');
+    // console.log('sr event', event, event.target);
+    // var isButton =
+    //   event.path[0].tagName === 'iron-icon' ||
+    //   event.path[0].tagName === 'paper-icon-button' ||
+    //   event.target.localName === 'paper-button';
+    // var isButtonLink =
+    //   event.path[0].tagName === 'icon-button' ||
+    //   (event.target.parentElement &&
+    //     event.target.parentElement.localName === 'icon-button');
+    // var isLink =
+    //   event.path[0].tagName === 'A' ||
+    //   (event.target.parentElement &&
+    //     event.target.parentElement.localName === 'a');
     var isNestedObj = event.target.localName === 'nested-list';
     // Do not open the result if the user clicked on a button or link inside the result (including the annotation).
-    if (!isButton && !isButtonLink && !isLink && !isNestedObj) {
-      if (event.target.getAttribute('isopen') === 'true') {
-        this.set('open', false);
-        event.target.setAttribute('isopen', 'false');
-      } else {
-        event.target.setAttribute('isopen', 'true');
-        this.set('open', true);
-      }
+    if (!isNestedObj) {
+      this.set('open', !this.open);
+      // if (event.target.getAttribute('isopen') === 'true') {
+      //   this.set('open', false);
+      //   event.target.setAttribute('isopen', 'false');
+      // } else {
+      //   event.target.setAttribute('isopen', 'true');
+      //   this.set('open', true);
+      // }
     }
   }
 }
